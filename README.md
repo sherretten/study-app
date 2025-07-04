@@ -1,6 +1,13 @@
-# Welcome to your Expo app 👋
+# Study app
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+This app is built to be similar to quizlet
+
+
+Key features:
+1. Make flash cards, multiple at once
+2. "study" as traditional flash cards, and as written answer. Check for completeness?
+3. Folder organization
+4. Import from quizlet?
 
 ## Get started
 
