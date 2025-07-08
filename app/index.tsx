@@ -1,3 +1,5 @@
+import CreateCard from '@/components/CreateCard';
+import FlashCard from '@/components/FlashCard';
 import { Text, View } from "react-native";
 
 export default function Index() {
@@ -12,6 +14,8 @@ export default function Index() {
 			}}
 		>
 			<Text>This page will show all the folders/classes.</Text>
+			<FlashCard flashCard={{ key: 'hi', answer: 'hello' }} />
+			<CreateCard removeCard={() => null} />
 		</View>
 	);
 }
