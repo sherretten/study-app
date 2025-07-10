@@ -7,7 +7,8 @@ export default function FlashCard(props: { flashCard }) {
 	const [showAnswer, setShowAnswer] = useState(false)
 	return (
 		<TouchableOpacity onPress={() => setShowAnswer(answer => !answer)}>
-			<Text>{showAnswer ? props.flashCard.key : props.flashCard.answer}</Text>
+			<Text>{showAnswer && props.flashCard.answer}</Text>
+			<Text>{!showAnswer && props.flashCard.key} </Text>
 		</TouchableOpacity>
 	)
 }

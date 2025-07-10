@@ -1,6 +1,8 @@
 import CreateCard from '@/components/CreateCard';
 import FlashCard from '@/components/FlashCard';
-import { Text, View } from "react-native";
+import { SQLiteProvider } from 'expo-sqlite';
+import { Suspense } from 'react';
+import { View } from "react-native";
 
 export default function Index() {
 
@@ -13,9 +15,13 @@ export default function Index() {
 				alignItems: "center",
 			}}
 		>
-			<Text>This page will show all the folders/classes.</Text>
-			<FlashCard flashCard={{ key: 'hi', answer: 'hello' }} />
-			<CreateCard removeCard={() => null} />
+			<Suspense fallback={<View>Loading...</View>}>
+				<SQLiteProvider databaseName='study-app' useSuspense>
+					{/* Do we want a router here? */}
+					<FlashCard flashCard={{ key: 'hi', answer: 'hello' }} />
+					<CreateCard removeCard={() => null} />
+				</SQLiteProvider>
+			</Suspense>
 		</View>
 	);
 }
