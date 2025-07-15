@@ -40,7 +40,7 @@ export default function FlashCard(props: { flashCard }) {
 			<Animated.View style={[styles.card, styles.cardBack, { transform: [{ rotateX: backInterpolate }] }]}>
 				<Text>{showAnswer && props.flashCard.answer}</Text>
 			</Animated.View>
-		</Pressable >
+		</Pressable>
 	)
 }
 
@@ -64,6 +64,7 @@ const styles = StyleSheet.create({
 		borderRadius: 6,
 		borderColor: '#0f172b',
 		borderWidth: 2,
+		height: 40,
 	},
 	card: {
 		width: 400,
