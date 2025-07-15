@@ -1,6 +1,10 @@
 import { Button, StyleSheet, Text, TextInput, View } from 'react-native';
 
 
+async function timeIn() {
+	await setTimeout(() => console.debug('100'), 1000);
+}
+
 export default function CreateCard(props: { removeCard: () => void }) {
 
 	return (
