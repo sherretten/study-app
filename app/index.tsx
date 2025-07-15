@@ -18,7 +18,9 @@ export default function Index() {
 			<Suspense fallback={<View>Loading...</View>}>
 				<SQLiteProvider databaseName='study-app' useSuspense>
 					{/* Do we want a router here? */}
-					<FlashCard flashCard={{ key: 'hi', answer: 'hello' }} />
+					<View>
+						<FlashCard flashCard={{ key: 'Front', answer: 'Back' }} />
+					</View>
 					<CreateCard removeCard={() => null} />
 				</SQLiteProvider>
 			</Suspense>
