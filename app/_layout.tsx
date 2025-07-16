@@ -1,8 +1,7 @@
 import { Stack } from "expo-router";
 import { SQLiteDatabase, SQLiteProvider } from 'expo-sqlite';
 import { Suspense } from 'react';
-import { Text } from 'react-native';
-import { PaperProvider } from 'react-native-paper';
+import { ActivityIndicator, MD2Colors, PaperProvider } from 'react-native-paper';
 
 export default function RootLayout() {
 	async function createDbIfNone(db: SQLiteDatabase) {
@@ -11,7 +10,7 @@ export default function RootLayout() {
 	}
 	return (
 		<PaperProvider>
-			<Suspense fallback={<Text>Loading...</Text>}>
+			<Suspense fallback={<ActivityIndicator animating color={MD2Colors.blue200} />}>
 				<SQLiteProvider databaseName='example.db' onInit={createDbIfNone} useSuspense>
 					<Stack>
 						<Stack.Screen name='index' options={{ title: 'Home' }}></Stack.Screen>

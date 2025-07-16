@@ -1,17 +1,22 @@
-import { Globals } from '@/app/constants/BaseStyles';
-import { Button, SafeAreaView, StyleSheet, Text, TextInput } from 'react-native';
+import { Globals } from '@/constants/BaseStyles';
+import { StyleSheet } from 'react-native';
+import { Button, Card, TextInput } from 'react-native-paper';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 export default function CreateCard(props: { removeCard: () => void }) {
 
 	return (
 		<SafeAreaProvider>
-			<Text>Create Card</Text>
-			<SafeAreaView style={styles.container}>
-				<TextInput editable multiline style={Globals.input} placeholder='Term' />
-				<TextInput editable multiline style={Globals.input} placeholder='Definition' />
-				<Button onPress={props.removeCard} title='Delete Card' />
-			</SafeAreaView>
+			<Card>
+				<Card.Title title='Create Card' />
+				<Card.Content>
+					<TextInput mode='outlined' multiline style={Globals.input} placeholder='Term' />
+					<TextInput mode='outlined' multiline style={Globals.input} placeholder='Definition' />
+				</Card.Content>
+				<Card.Actions>
+					<Button onPress={props.removeCard}>Delete</Button>
+				</Card.Actions>
+			</Card>
 		</SafeAreaProvider>
 	)
 }
@@ -20,11 +25,9 @@ export default function CreateCard(props: { removeCard: () => void }) {
 const styles = StyleSheet.create({
 	container: {
 		display: 'flex',
-		flexDirection: 'column',
-		flex: 1,
+		flexDirection: 'row',
 		padding: 15,
 		borderRadius: 6,
-		borderColor: '#0f172b',
 		borderWidth: 3,
 	},
 });

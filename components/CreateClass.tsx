@@ -1,4 +1,4 @@
-import { Globals } from '@/app/constants/BaseStyles';
+import { Globals } from '@/constants/BaseStyles';
 import { router } from 'expo-router';
 import { useSQLiteContext } from 'expo-sqlite';
 import { useState } from 'react';
