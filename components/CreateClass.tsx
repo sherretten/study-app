@@ -7,7 +7,7 @@ import { TextInput } from 'react-native-gesture-handler';
 
 
 export default function CreateClass() {
-	const [className, setClassName] = useState('');
+	const [className, setClassName] = useState(' ');
 	const db = useSQLiteContext();
 
 	async function handleSave() {

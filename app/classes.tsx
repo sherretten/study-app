@@ -1,3 +1,4 @@
+import { router } from 'expo-router';
 import { useState } from 'react';
 import { SafeAreaView } from 'react-native';
 import { Button, Card, IconButton, TextInput } from 'react-native-paper';
@@ -41,7 +42,7 @@ export default function Classes() {
 
 			{classes.map(course => {
 				return (
-					<Card key={course.id} onPress={ }>
+					<Card key={course.id} onPress={() => router.push(`/course/${course.id}`)}>
 						<Card.Title title={course.course} />
 					</Card>
 				)

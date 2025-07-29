@@ -3,6 +3,7 @@ import { useFocusEffect } from 'expo-router';
 import { useSQLiteContext } from 'expo-sqlite';
 import { useCallback, useState } from 'react';
 import { FlatList, SafeAreaView } from "react-native";
+import { Text } from "react-native-paper";
 
 export default function Index() {
 	const [data, setData] = useState([]);
