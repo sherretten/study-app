@@ -1,4 +1,4 @@
-import { router } from 'expo-router';
+import { Link, router } from 'expo-router';
 import { useState } from 'react';
 import { SafeAreaView } from 'react-native';
 import { Button, Card, IconButton, TextInput } from 'react-native-paper';
@@ -25,7 +25,11 @@ export default function Classes() {
 	}
 
 	return (
-		<SafeAreaView>
+		<SafeAreaView style={{
+			flex: 1,
+			justifyContent: "center",
+			alignItems: "center",
+		}}>
 			{/* Add button that drops down an input */}
 			<IconButton onPress={() => setShowAdd(!showAdd)} icon='add'></IconButton>
 			{showAdd &&
@@ -47,6 +51,7 @@ export default function Classes() {
 					</Card>
 				)
 			})}
+			<Link href='/'>Home</Link>
 		</SafeAreaView>
 	)
 }
