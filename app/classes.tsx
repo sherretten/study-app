@@ -1,5 +1,6 @@
 import { Link, router } from 'expo-router';
-import { useState } from 'react';
+import { useSQLiteContext } from 'expo-sqlite';
+import { useCallback, useLayoutEffect, useState } from 'react';
 import { SafeAreaView } from 'react-native';
 import { Button, Card, IconButton, TextInput } from 'react-native-paper';
 
@@ -10,12 +11,19 @@ export default function Classes() {
 	const [showAdd, setShowAdd] = useState(false);
 	const [isSaving, setIsSaving] = useState(false);
 
-	const fetchClasses = () => {
+	const db = useSQLiteContext();
 
+	const fetchClasses = async () => {
+		const res = await db.getAllAsync("SELECT * FROM classes")
+		setClasses(res);
 	}
 
-	const handleSave = () => {
+	useLayoutEffect(useCallback(() => {
+		fetchClasses();
+	}, [])
+	)
 
+	const handleSave = () => {
 		try {
 
 			setShowAdd(false);
@@ -31,7 +39,7 @@ export default function Classes() {
 			alignItems: "center",
 		}}>
 			{/* Add button that drops down an input */}
-			<IconButton onPress={() => setShowAdd(!showAdd)} icon='add'></IconButton>
+			<IconButton mode='outlined' onPress={() => setShowAdd(!showAdd)} icon='border-color'></IconButton>
 			{showAdd &&
 				<Card>
 					<Card.Title title='New Course'></Card.Title>
@@ -39,7 +47,7 @@ export default function Classes() {
 						<TextInput mode='outlined' placeholder='Course' />
 					</Card.Content>
 					<Card.Actions>
-						<Button onPress={handleSave} loading={isSaving} >Save</Button>
+						<Button onPress={handleSave} loading={isSaving}>Save</Button>
 					</Card.Actions>
 				</Card>
 			}

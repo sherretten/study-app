@@ -21,7 +21,7 @@ export default function RootLayout() {
 				<SQLiteProvider databaseName='example.db' onInit={createDbIfNone} useSuspense>
 					<Stack>
 						<Stack.Screen name='index' options={{ title: 'Home' }}></Stack.Screen>
-						<Stack.Screen name='classes' options={{ title: 'classes', headerShown: false }}></Stack.Screen>
+						<Stack.Screen name='classes' options={{ title: 'Courses', headerBackButtonMenuEnabled: true }}></Stack.Screen>
 					</Stack>
 				</SQLiteProvider>
 			</Suspense>
