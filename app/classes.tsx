@@ -1,50 +1,54 @@
-import { Link, router } from 'expo-router';
+import { router } from 'expo-router';
 import { useSQLiteContext } from 'expo-sqlite';
-import { useCallback, useLayoutEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { SafeAreaView } from 'react-native';
-import { Button, Card, IconButton, TextInput } from 'react-native-paper';
+import { Button, Card, IconButton, TextInput, useTheme } from 'react-native-paper';
 
 
 export default function Classes() {
-	// Grab classes
-	const [classes, setClasses] = useState<{ id: number, course: string }[]>([{ id: 1, course: 'Evidence Based Practice' }, { id: 2, course: 'Neuro' }, { id: 3, course: "Community Engagement" }]);
+	const [classes, setClasses] = useState<{ id: number, name: string }[]>([{ id: 1, name: 'Evidence Based Practice' }, { id: 2, name: 'Neuro' }, { id: 3, name: "Community Engagement" }]);
 	const [showAdd, setShowAdd] = useState(false);
 	const [isSaving, setIsSaving] = useState(false);
+	const [courseName, setCourseName] = useState('');
 
+	const theme = useTheme();
 	const db = useSQLiteContext();
 
-	const fetchClasses = async () => {
-		const res = await db.getAllAsync("SELECT * FROM classes")
-		setClasses(res);
-	}
-
-	useLayoutEffect(useCallback(() => {
-		fetchClasses();
-	}, [])
-	)
-
-	const handleSave = () => {
+	const fetchClasses = useCallback(async () => {
 		try {
+			const res = await db.getAllAsync("SELECT * FROM class");
+			console.debug(res);
+			setClasses(res);
+		} catch (err) {
+			console.error('Error grabbing classes', err);
+		}
+	}, [db]);
 
+	useEffect(() => { fetchClasses() }, [fetchClasses])
+
+	const handleSave = useCallback(async () => {
+		try {
+			const res = await db.runAsync(`INSERT INTO class (name) VALUES (?)`, [courseName])
+			console.log("Successfully saved class", res)
 			setShowAdd(false);
 		} catch (err) {
-			console.error("error adding new course",)
+			console.error("error adding new course", err)
 		}
-	}
+	}, [courseName, db]);
 
 	return (
 		<SafeAreaView style={{
 			flex: 1,
 			justifyContent: "center",
-			alignItems: "center",
+			backgroundColor: theme.colors.background,
 		}}>
 			{/* Add button that drops down an input */}
-			<IconButton mode='outlined' onPress={() => setShowAdd(!showAdd)} icon='border-color'></IconButton>
+			<IconButton style={{ justifyContent: 'flex-end' }} mode='outlined' onPress={() => setShowAdd(!showAdd)} icon='plus'></IconButton>
 			{showAdd &&
 				<Card>
 					<Card.Title title='New Course'></Card.Title>
 					<Card.Content>
-						<TextInput mode='outlined' placeholder='Course' />
+						<TextInput mode='outlined' placeholder='Course' value={courseName} onChangeText={(e) => setCourseName(e)} />
 					</Card.Content>
 					<Card.Actions>
 						<Button onPress={handleSave} loading={isSaving}>Save</Button>
@@ -55,11 +59,10 @@ export default function Classes() {
 			{classes.map(course => {
 				return (
 					<Card key={course.id} onPress={() => router.push(`/course/${course.id}`)}>
-						<Card.Title title={course.course} />
+						<Card.Title title={course.name} />
 					</Card>
 				)
 			})}
-			<Link href='/'>Home</Link>
 		</SafeAreaView>
 	)
 }
