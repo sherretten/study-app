@@ -1,8 +1,8 @@
-import { Stack, useLocalSearchParams } from 'expo-router';
+import { Link, Stack, useLocalSearchParams } from 'expo-router';
 import { useSQLiteContext } from 'expo-sqlite';
 import { useCallback, useEffect, useState } from 'react';
 import { SafeAreaView } from 'react-native';
-import { useTheme } from 'react-native-paper';
+import { Button, useTheme } from 'react-native-paper';
 
 
 export default function Course() {
@@ -21,10 +21,6 @@ export default function Course() {
 				db.getAllAsync("SELECT * from sets WHERE class_id = ?", [courseId])
 			]);
 
-			// const className = await db.getFirstAsync("SELECT name from class WHERE id=?", [courseId]);
-			// const sets = await db.getAllAsync("SELECT * from sets WHERE class_id=?", [courseId]);
-
-			console.debug('Classname', className, 'sets', sets, 'id', courseId);
 			setCourse(className.name);
 			setSets(sets);
 		} catch (err) {
@@ -44,6 +40,7 @@ export default function Course() {
 			backgroundColor: theme.colors.background,
 		}}>
 			<Stack.Screen options={{ headerShown: true, title: course }} />
+			<Button mode='outlined' style={{ backgroundColor: theme.colors.primary }}><Link href="">Create Set</Link></Button>
 
 
 		</SafeAreaView>
