@@ -28,7 +28,7 @@ export default function Classes() {
 
 	const handleSave = useCallback(async () => {
 		try {
-			const res = await db.runAsync(`INSERT INTO class (name) VALUES (?)`, [courseName])
+			const res = await db.runAsync(`INSERT INTO class (name) VALUES (?) RETURNING id, name`, [courseName])
 			console.log("Successfully saved class", res)
 			setShowAdd(false);
 		} catch (err) {

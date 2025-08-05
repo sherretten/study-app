@@ -1,4 +1,3 @@
-import CreateCard from '@/components/CreateCard';
 import { Link, useFocusEffect } from 'expo-router';
 import { useSQLiteContext } from 'expo-sqlite';
 import { useCallback, useState } from 'react';
@@ -10,6 +9,8 @@ export default function Index() {
 
 	const theme = useTheme();
 	const db = useSQLiteContext();
+
+	console.debug(data);
 
 	const getData = useCallback(async () => {
 		try {
@@ -37,7 +38,6 @@ export default function Index() {
 				alignItems: "center",
 				backgroundColor: theme.colors.background,
 			}}>
-			<CreateCard removeCard={() => null} />
 			{/* <FlatList data={data} renderItem={(item) => <Text>{item.name}</Text>}></FlatList> */}
 			<Button mode='outlined'><Link href='/classes' style={{ color: theme.colors.primary }}>Classes</Link></Button>
 		</SafeAreaView>

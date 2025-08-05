@@ -1,14 +1,13 @@
 import { Link, Stack, useLocalSearchParams } from 'expo-router';
 import { useSQLiteContext } from 'expo-sqlite';
 import { useCallback, useEffect, useState } from 'react';
-import { SafeAreaView } from 'react-native';
-import { Button, useTheme } from 'react-native-paper';
+import { SafeAreaView, View } from 'react-native';
+import { Button, Text, useTheme } from 'react-native-paper';
 
 
 export default function Course() {
 	const [course, setCourse] = useState('');
 	const [sets, setSets] = useState([]);
-	const [showAdd, setShowAdd] = useState(false);
 
 	const { courseId } = useLocalSearchParams();
 	const theme = useTheme();
@@ -40,8 +39,13 @@ export default function Course() {
 			backgroundColor: theme.colors.background,
 		}}>
 			<Stack.Screen options={{ headerShown: true, title: course }} />
-			<Button mode='outlined' style={{ backgroundColor: theme.colors.primary }}><Link href="">Create Set</Link></Button>
+			<Button mode='contained' style={{ backgroundColor: theme.colors.primary }}>
+				<Link style={{ color: 'black' }} href={`/set/create?courseId=${courseId}`}>Create Set</Link>
+			</Button>
 
+			{sets.map(set => <View key={set.id}>
+				<Text variant='titleLarge' >{set.name}</Text>
+			</View>)}
 
 		</SafeAreaView>
 	)
