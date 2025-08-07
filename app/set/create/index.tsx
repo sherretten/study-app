@@ -36,15 +36,17 @@ export default function CreateSet() {
 	async function handleSave() {
 		try {
 			setLoading(true);
-			const setRes = db.runAsync("INSERT INTO sets (name) VALUES ? RETURNING id", [setName]);
+			console.debug(setName);
+			const setRes = await db.runAsync("INSERT INTO sets (name) VALUES (?)", [setName]);
 			console.debug(setRes);
 
-			const cardInserts = cards.map(card => `(${card.term}, ${card.definition}, ${setRes})`).join(',');
-			const cardsRes = db.runAsync(`INSERT INTO cards (term, definition, set_id) VALUES (${cardInserts})`);
+			// const cardInserts = cards.map(card => `(${card.term}, ${card.definition}, ${setRes})`).join(',');
+			// const cardsRes = await db.runAsync(`INSERT INTO cards (term, definition, set_id) VALUES (${cardInserts})`);
+			// console.debug(cardsRes);
 			router.back();
 
 		} catch (err) {
-			console.error("Error creating set or table",)
+			console.error("Error creating set or table", err)
 		} finally {
 			setLoading(false);
 		}
@@ -70,13 +72,14 @@ export default function CreateSet() {
 
 			<Button style={styles.button} mode='outlined' onPress={addCard}>Add Card</Button>
 
-			<Button mode='outlined' onPress={handleSave} loading={loading}>Save</Button>
+			<Button mode='outlined' disabled={!setName} onPress={handleSave} loading={loading}>Save</Button>
 		</ScrollView>
 	)
 }
 
 const styles = StyleSheet.create({
 	button: {
-		width: 'auto'
+		width: 'auto',
+		marginBottom: 10,
 	}
 })
