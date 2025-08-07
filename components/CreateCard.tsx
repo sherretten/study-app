@@ -4,17 +4,24 @@ import { StyleSheet, View } from 'react-native';
 import { IconButton, TextInput } from 'react-native-paper';
 
 export default function CreateCard(props: { card: FlashCard, updateCard: (card: FlashCard) => void, removeCard: (id: number) => void }) {
+
+
+	const handleChange = (field: string, value: string) => {
+		props.updateCard({ ...props.card, [field]: value });
+	}
+
+
 	return (
 		<View style={styles.container}>
 			<View style={{ alignItems: "flex-end" }}>
-				<IconButton mode='contained' icon='trash' style={{}} onPress={() => props.removeCard(props.card.id)}></IconButton>
+				<IconButton mode='contained' icon='trash' onPress={() => props.removeCard(props.card.id)}></IconButton>
 			</View>
 			<View style={{ flexDirection: 'row' }}>
 				<View style={{ flexBasis: '50%' }}>
-					<TextInput mode='outlined' multiline style={Globals.input} label='Term' />
+					<TextInput mode='outlined' multiline style={Globals.input} label='Term' value={props.card.term} onChangeText={(text) => handleChange('term', text)} />
 				</View>
 				<View style={{ flexBasis: '50%' }}>
-					<TextInput mode='outlined' multiline style={Globals.input} label='Definition' />
+					<TextInput mode='outlined' multiline style={Globals.input} label='Definition' value={props.card.definition} onChangeText={(text) => handleChange('definition', text)} />
 				</View>
 			</View>
 			<View>

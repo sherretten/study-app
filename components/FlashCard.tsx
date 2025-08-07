@@ -1,8 +1,9 @@
+import { FlashCard as Card } from '@/constants/Types';
 import { useRef, useState } from 'react';
 import { Animated, Pressable, StyleSheet } from 'react-native';
 import { Text } from 'react-native-paper';
 
-export default function FlashCard(props: { flashCard }) {
+export default function FlashCard(props: { flashCard: Card }) {
 	const [showAnswer, setShowAnswer] = useState(false)
 	const animatedValue = useRef(new Animated.Value(0)).current;
 
@@ -31,13 +32,14 @@ export default function FlashCard(props: { flashCard }) {
 		setShowAnswer(!showAnswer);
 	};
 
+	console.debug(props.flashCard);
 	return (
 		<Pressable onPress={flipCard}>
 			<Animated.View style={[styles.card, { transform: [{ rotateX: frontInterpolate }] }]}>
-				<Text variant='displayMedium'>{!showAnswer && props.flashCard.key}</Text>
+				<Text variant='displayMedium'>{!showAnswer && props?.flashCard?.term}</Text>
 			</Animated.View>
 			<Animated.View style={[styles.card, styles.cardBack, { transform: [{ rotateX: backInterpolate }] }]}>
-				<Text variant='displayMedium'>{showAnswer && props.flashCard.answer}</Text>
+				<Text variant='displayMedium'>{showAnswer && props?.flashCard?.definition}</Text>
 			</Animated.View>
 		</Pressable>
 	)
