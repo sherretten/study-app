@@ -25,7 +25,7 @@ export default function SetView() {
 			setData(setRes);
 			setCards(cardRes);
 		} catch (err) {
-			console.error("Error fetching set: ", err);
+			console.error("Error fetching set:", err);
 		}
 	}, [db, setId])
 
