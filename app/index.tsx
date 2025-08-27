@@ -33,7 +33,6 @@ export default function Index() {
 		<SafeAreaView
 			style={{
 				flex: 1,
-				// display: "flex",
 				justifyContent: "center",
 				alignItems: "center",
 				backgroundColor: theme.colors.background,

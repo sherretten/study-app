@@ -1,5 +1,5 @@
 import FlashCard from '@/components/FlashCard';
-import { Stack, useFocusEffect, useLocalSearchParams } from 'expo-router';
+import { Link, Stack, useFocusEffect, useLocalSearchParams } from 'expo-router';
 import { useSQLiteContext } from 'expo-sqlite';
 import { useCallback, useState } from 'react';
 import { View } from 'react-native';
@@ -39,10 +39,13 @@ export default function SetView() {
 		<SafeAreaView style={{
 			flex: 1,
 			justifyContent: "center",
+			alignItems: 'center',
 			backgroundColor: theme.colors.background,
 		}}>
 			<Stack.Screen options={{ headerShown: true }} />
 			<Text variant='displayLarge'>{data?.name}</Text>
+
+			<Button buttonColor={theme.colors.onPrimary} mode='outlined'><Link href={`/create?courseId=${data?.class_id}`}>Add Cards</Link></Button>
 
 			<View style={{
 				display: 'flex',

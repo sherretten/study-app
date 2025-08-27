@@ -2,7 +2,7 @@ import { Link, Stack, useLocalSearchParams } from 'expo-router';
 import { useSQLiteContext } from 'expo-sqlite';
 import { useCallback, useEffect, useState } from 'react';
 import { SafeAreaView, View } from 'react-native';
-import { Button, Text, useTheme } from 'react-native-paper';
+import { Button, useTheme } from 'react-native-paper';
 
 
 export default function Course() {
@@ -43,8 +43,10 @@ export default function Course() {
 				<Link style={{ color: 'black' }} href={`/set/create?courseId=${courseId}`}>Create Set</Link>
 			</Button>
 
-			{sets.map(set => <View key={set.id}>
-				<Text variant='titleLarge' >{set.name}</Text>
+			{sets.map(set => <View key={set.id} style={{ margin: 2 }}>
+				<Button mode='outlined' buttonColor={theme.colors.onPrimary}>
+					<Link href={`/set/${set.id}`} style={{}}>
+						{set.name} </Link></Button>
 			</View>)}
 
 		</SafeAreaView>

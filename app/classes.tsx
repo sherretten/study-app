@@ -17,7 +17,7 @@ export default function Classes() {
 	const fetchClasses = useCallback(async () => {
 		try {
 			const res = await db.getAllAsync("SELECT * FROM class");
-			console.debug(res);
+			console.debug("Classes", res);
 			setClasses(res);
 		} catch (err) {
 			console.error('Error grabbing classes', err);
@@ -39,6 +39,7 @@ export default function Classes() {
 	return (
 		<SafeAreaView style={{
 			flex: 1,
+			alignItems: "center",
 			justifyContent: "center",
 			backgroundColor: theme.colors.background,
 		}}>
