@@ -10,8 +10,6 @@ export default function Index() {
 	const theme = useTheme();
 	const db = useSQLiteContext();
 
-	console.debug(data);
-
 	const getData = useCallback(async () => {
 		try {
 			const result = await db.getAllAsync("SELECT * from class")

@@ -5,11 +5,9 @@ import { IconButton, TextInput } from 'react-native-paper';
 
 export default function CreateCard(props: { card: FlashCard, updateCard: (card: FlashCard) => void, removeCard: (id: number) => void }) {
 
-
 	const handleChange = (field: string, value: string) => {
 		props.updateCard({ ...props.card, [field]: value });
 	}
-
 
 	return (
 		<View style={styles.container}>

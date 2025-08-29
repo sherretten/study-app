@@ -34,42 +34,21 @@ export default function FlashCard(props: { flashCard: Card }) {
 
 	console.debug(props.flashCard);
 	return (
-		<Pressable onPress={flipCard}>
+		<Pressable onPress={flipCard} style={{ position: 'relative', width: 600, height: 300, alignSelf: 'center' }}>
 			<Animated.View style={[styles.card, { transform: [{ rotateX: frontInterpolate }] }]}>
-				<Text variant='displayMedium'>{!showAnswer && props?.flashCard?.term}</Text>
+				<Text style={{ textAlign: 'center' }} variant='displayMedium'>{!showAnswer && props?.flashCard?.term}</Text>
 			</Animated.View>
 			<Animated.View style={[styles.card, styles.cardBack, { transform: [{ rotateX: backInterpolate }] }]}>
-				<Text variant='displayMedium'>{showAnswer && props?.flashCard?.definition}</Text>
+				<Text style={{ textAlign: 'center', padding: 4 }} variant='labelMedium'>{showAnswer && props?.flashCard?.definition}</Text>
 			</Animated.View>
 		</Pressable>
 	)
 }
 
 const styles = StyleSheet.create({
-	container: {
-		display: 'flex',
-		flexDirection: 'row',
-		gap: 2,
-		padding: 15,
-		// flex: 1,
-		borderRadius: 6,
-		borderColor: '#0f172b',
-		borderWidth: 3,
-	},
-	inputContainer: {
-		display: 'flex',
-		flexDirection: 'row',
-	},
-	input: {
-		padding: 5,
-		borderRadius: 6,
-		borderColor: '#0f172b',
-		borderWidth: 2,
-		height: 40,
-	},
 	card: {
-		width: 400,
-		height: 250,
+		width: '100%',
+		height: '100%',
 		alignItems: 'center',
 		justifyContent: 'center',
 		backgroundColor: '#2196F3',
@@ -78,6 +57,6 @@ const styles = StyleSheet.create({
 		borderRadius: 6,
 	},
 	cardBack: {
-		backgroundColor: '#4caf50',
+		backgroundColor: '#2196F3',
 	},
 });

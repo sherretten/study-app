@@ -2,15 +2,15 @@ import CreateCard from '@/components/CreateCard';
 import { FlashCard } from '@/constants/Types';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import { useSQLiteContext } from 'expo-sqlite';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
 import { Button, TextInput, useTheme } from 'react-native-paper';
 
 
-export default function CreateSet() {
-	const { courseId } = useLocalSearchParams<{ courseId: string }>();
+export default function EditSet() {
+	const { courseId, setId } = useLocalSearchParams<{ courseId: string, setId: string }>();
 	const [setName, setSetName] = useState('');
-	const [cards, setCards] = useState<FlashCard[]>([{ id: 1, term: '', definition: '' }])
+	const [cards, setCards] = useState<FlashCard[]>([])
 	const [loading, setLoading] = useState(false);
 
 	const theme = useTheme();
@@ -21,32 +21,53 @@ export default function CreateSet() {
 		setCards(cards => [...cards, { id: Date.now(), definition: '', term: '' }])
 	}
 
+	useEffect(() => {
+		const fetchCards = async () => {
+			try {
+				const cardsRes = await db.getAllAsync("SELECT * from cards where set_id = ?;", setId);
+				const set = await db.getFirstAsync("SELECT * FROM sets WHERE id = ?;", setId);
+
+				setSetName(set.name);
+
+				if (cardsRes.length === 0) {
+					addCard();
+				} else {
+					setCards(cardsRes);
+				}
+			} catch (err) {
+				console.error(`Error fetching cards for set: ${setId}`, err);
+			}
+		};
+		fetchCards();
+	}, [db, setId])
+
 	async function deleteCard(cardId: number) {
-		setCards(cards => {
-			const card = cards.filter(c => c.id !== cardId);
-			return card;
-		})
+		try {
+			await db.runAsync("DELETE FROM cards WHERE id = ?", cardId);
+			setCards(cards => {
+				const card = cards.filter(c => c.id !== cardId);
+				return card;
+			})
+		} catch (err) {
+			console.error("Error deleting card from set", err);
+		}
 	}
 
 	async function handleSave() {
 		try {
 			setLoading(true);
-			console.debug(setName);
-			const setRes = await db.runAsync("INSERT INTO sets (name, class_id) VALUES (?, ?);", setName, courseId);
-			// const setRes = { lastInsertRowId: 3 };
-			const sets = await db.getAllAsync("SELECT * from sets;");
-			console.debug(sets);
+			await db.runAsync("UPDATE sets SET name = ? WHERE id = ?;", setName, setId);
 
 			await db.withTransactionAsync(async () => {
 				for (const card of cards) {
-					await db.runAsync(`INSERT INTO cards (term, definition, set_id) VALUES (?, ?, ?)`, [card.term, card.definition, setRes.lastInsertRowId]);
+					await db.runAsync(`
+						INSERT INTO cards (id, term, definition, set_id) VALUES (?, ?, ?, ?) 
+						ON CONFLICT(id) DO UPDATE SET term = excluded.term, definition = excluded.definition, set_id = excluded.set_id`,
+						[card.id || null, card.term, card.definition, setId]);
 				}
 			})
-			const cardsRest = await db.getAllAsync("SELECT * from cards where set_id = ?;", setRes.lastInsertRowId);
 
-			console.debug(cardsRest);
-			//We want to route to the set view;
-			router.push(`/set/${setRes.lastInsertRowId}`);
+			router.push(`/set/${setId}`);
 		} catch (err) {
 			console.error("Error creating set or cards", err)
 		} finally {
@@ -65,7 +86,7 @@ export default function CreateSet() {
 
 	return (
 		<ScrollView style={{ backgroundColor: theme.colors.background }}>
-			<Stack.Screen options={{ headerShown: true, title: 'Create Set', headerBackButtonMenuEnabled: true }} />
+			<Stack.Screen options={{ title: 'Edit Set', headerBackButtonMenuEnabled: true }} />
 			<TextInput label="Title" value={setName} onChangeText={text => setSetName(text)} />
 
 			{cards.map(card => <CreateCard key={card.id} card={card} updateCard={updateCard} removeCard={deleteCard} />)}

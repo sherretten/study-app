@@ -42,27 +42,28 @@ export default function SetView() {
 			alignItems: 'center',
 			backgroundColor: theme.colors.background,
 		}}>
-			<Stack.Screen options={{ headerShown: true }} />
+			<Stack.Screen options={{ headerShown: true, headerBackButtonMenuEnabled: true }} />
 			<Text variant='displayLarge'>{data?.name}</Text>
 
-			<Button buttonColor={theme.colors.onPrimary} mode='outlined'><Link href={`/create?courseId=${data?.class_id}`}>Add Cards</Link></Button>
+			<Button buttonColor={theme.colors.onPrimary} mode='outlined'><Link href={`/set/${setId}/edit?courseId=${data?.class_id}`}>Edit Cards</Link></Button>
 
 			<View style={{
 				display: 'flex',
 				flexWrap: 'wrap',
 			}}>
 				{/* I think we want a new route for this? */}
-				<Button style={{ padding: 10, borderColor: theme.colors.primary }} onPress={() => null}>Test</Button>
-				<Button onPress={() => null}>Flash Card</Button>
+				<Button style={{ padding: 10, borderColor: theme.colors.primary }}><Link href={`/set/${setId}/test`}>Test</Link></Button>
 			</View>
 
 			{cards.length > 0 &&
-				<>
+				<View style={{ display: 'flex', flexDirection: 'column' }}>
 					<FlashCard flashCard={cards[viewingIndex]} />
-					<IconButton icon='arrow-left' onPress={() => setIndex(index => --index)} disabled={viewingIndex === 0}></IconButton>
-					<Text>{viewingIndex + 1} / {cards.length}</Text>
-					<IconButton icon='arrow-right' onPress={() => setIndex(index => ++index)} disabled={viewingIndex === cards.length - 1}></IconButton>
-				</>
+					<View style={{ display: 'flex', flexDirection: 'row', alignItems: 'baseline', justifyContent: 'space-evenly' }}>
+						<IconButton icon='arrow-left' onPress={() => setIndex(index => --index)} disabled={viewingIndex === 0}></IconButton>
+						<Text>{viewingIndex + 1} / {cards.length}</Text>
+						<IconButton icon='arrow-right' onPress={() => setIndex(index => ++index)} disabled={viewingIndex === cards.length - 1}></IconButton>
+					</View>
+				</View>
 			}
 		</SafeAreaView>
 	)
