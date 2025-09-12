@@ -1,7 +1,7 @@
 import { router } from 'expo-router';
 import { useSQLiteContext } from 'expo-sqlite';
 import { useCallback, useEffect, useState } from 'react';
-import { SafeAreaView } from 'react-native';
+import { SafeAreaView, View } from 'react-native';
 import { Button, Card, IconButton, TextInput, useTheme } from 'react-native-paper';
 
 
@@ -41,6 +41,7 @@ export default function Classes() {
 			flex: 1,
 			alignItems: "center",
 			justifyContent: "center",
+			gap: 1,
 			backgroundColor: theme.colors.background,
 		}}>
 			{/* Add button that drops down an input */}
@@ -56,14 +57,15 @@ export default function Classes() {
 					</Card.Actions>
 				</Card>
 			}
-
-			{classes.map(course => {
-				return (
-					<Card key={course.id} onPress={() => router.push(`/course/${course.id}`)}>
-						<Card.Title title={course.name} />
-					</Card>
-				)
-			})}
+			<View style={{ width: 100, }}>
+				{classes.map(course => {
+					return (
+						<Card style={{ marginBottom: 2, alignItems: 'center' }} key={course.id} onPress={() => router.push(`/course/${course.id}`)}>
+							<Card.Title title={course.name} />
+						</Card>
+					)
+				})}
+			</View>
 		</SafeAreaView>
 	)
 }
