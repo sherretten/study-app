@@ -2,7 +2,7 @@ import * as SQLite from 'expo-sqlite';
 
 import { Card } from '../types';
 
-	const db = await SQLite.openDatabaseAsync('study-app');
+const db = await SQLite.openDatabaseAsync('study-app');
 
 export const cardQueries = {
 	upsertCard: async (card: Partial<Card>) => {

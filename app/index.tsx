@@ -1,32 +1,11 @@
-import { Link, useFocusEffect } from 'expo-router';
-import { useSQLiteContext } from 'expo-sqlite';
-import { useCallback, useState } from 'react';
+import RecentSets from '@/components/RecentSets';
 import { SafeAreaView } from "react-native";
-import { Button, useTheme } from "react-native-paper";
+import { useTheme } from "react-native-paper";
+import Classes from './classes';
 
 export default function Index() {
-	const [data, setData] = useState([]);
-
 	const theme = useTheme();
-	const db = useSQLiteContext();
 
-	const getData = useCallback(async () => {
-		try {
-			const result = await db.getAllAsync("SELECT * from class")
-			setData(result);
-		} catch (err) {
-			console.error('error grabbing classes', err);
-		}
-
-	}, [db])
-
-	useFocusEffect(
-		useCallback(() => {
-			getData();
-		}, [getData])
-	)
-
-	//fetch classes here. 
 	return (
 		<SafeAreaView
 			style={{
@@ -35,8 +14,8 @@ export default function Index() {
 				alignItems: "center",
 				backgroundColor: theme.colors.background,
 			}}>
-			{/* <FlatList data={data} renderItem={(item) => <Text>{item.name}</Text>}></FlatList> */}
-			<Button mode='outlined'><Link href='/classes' style={{ color: theme.colors.primary }}>Classes</Link></Button>
+			<Classes />
+			<RecentSets />
 		</SafeAreaView>
 	);
 }
