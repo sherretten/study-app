@@ -2,9 +2,9 @@ import CreateCard from '@/components/CreateCard';
 import { FlashCard } from '@/constants/Types';
 import { cardQueries } from '@/db/queries/cardQueries';
 import { setQueries } from '@/db/queries/setQueries';
-import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useSQLiteContext } from 'expo-sqlite';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
 import { Button, TextInput, useTheme } from 'react-native-paper';
 
@@ -19,9 +19,9 @@ export default function EditSet() {
 	const db = useSQLiteContext();
 	const router = useRouter();
 
-	function addCard() {
-		setCards(cards => [...cards, { id: Date.now(), definition: '', term: '' }])
-	}
+	const addCard = useCallback(() => {
+		setCards(cards => [...cards, { id: Date.now(), definition: '', term: '', setId }])
+	}, [setId]);
 
 	useEffect(() => {
 		const fetchCards = async () => {
@@ -35,7 +35,7 @@ export default function EditSet() {
 			}
 		};
 		fetchCards();
-	}, [db, setId])
+	}, [addCard, db, setId])
 
 	async function deleteCard(cardId: number) {
 		try {
@@ -52,16 +52,8 @@ export default function EditSet() {
 	async function handleSave() {
 		try {
 			setLoading(true);
-			await db.runAsync("UPDATE sets SET name = ? WHERE id = ?;", setName, setId);
-
-			await db.withTransactionAsync(async () => {
-				for (const card of cards) {
-					await db.runAsync(`
-						INSERT INTO cards (id, term, definition, set_id) VALUES (?, ?, ?, ?) 
-						ON CONFLICT(id) DO UPDATE SET term = excluded.term, definition = excluded.definition, set_id = excluded.set_id`,
-						[card.id || null, card.term, card.definition, setId]);
-				}
-			})
+			await setQueries.updateSet(setName, +setId);
+			await cardQueries.upsertCards(cards, +setId);
 
 			router.push(`/set/${setId}`);
 		} catch (err) {
@@ -82,7 +74,6 @@ export default function EditSet() {
 
 	return (
 		<ScrollView style={{ backgroundColor: theme.colors.background }}>
-			<Stack.Screen options={{ title: 'Edit Set', headerBackButtonMenuEnabled: true }} />
 			<TextInput label="Title" value={setName} onChangeText={text => setSetName(text)} />
 
 			{cards.map(card => <CreateCard key={card.id} card={card} updateCard={updateCard} removeCard={deleteCard} />)}

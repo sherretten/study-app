@@ -16,12 +16,13 @@ export default function RootLayout() {
 	}
 
 	return (
-		<PaperProvider>
+		<PaperProvider theme={{ dark: false }}>
 			<Suspense fallback={<ActivityIndicator animating color={MD2Colors.blue200} />}>
-				<SQLiteProvider databaseName='example.db' onInit={createDbIfNone} useSuspense>
+				<SQLiteProvider databaseName='study-app.db' onInit={createDbIfNone} useSuspense>
 					<Stack>
 						<Stack.Screen name='index' options={{ title: 'Home' }}></Stack.Screen>
 						<Stack.Screen name='classes' options={{ title: 'Courses', headerBackButtonMenuEnabled: true }}></Stack.Screen>
+						<Stack.Screen name='set/[setId]' options={{ headerShown: false }} />
 					</Stack>
 				</SQLiteProvider>
 			</Suspense>

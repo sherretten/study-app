@@ -14,8 +14,14 @@ export const setQueries = {
 				FOREIGN KEY (class_id) REFERENCES class(id));
 		`);
 	},
-	updateSet: async (set: Partial<Set>) => {
-		const db = await getDB();
+	updateSet: async (setName: string, id: number) => {
+		try {
+			const db = await getDB();
+			await db.runAsync("UPDATE sets SET name = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?;", setName, id)
+		} catch (err) {
+			console.error(`Error updating set: ${err}`)
+			throw new Error('Error updating set, please try again later');
+		}
 	},
 	createSet: async (set: Omit<Set, 'created_at' | 'updated_at' | 'id'>): Promise<number | null> => {
 		try {
@@ -28,7 +34,13 @@ export const setQueries = {
 		}
 	},
 	deleteSet: async (setId: number) => {
-		const db = await getDB();
+		try {
+			const db = await getDB();
+			await db.runAsync("DELETE FROM sets WHERE id = ?", setId);
+		} catch (err) {
+			console.error(`Error deleting set: ${err}`)
+			throw new Error("Error deleting set, try again later.")
+		}
 	},
 	getSets: async (limit: number = 100): Promise<Set[] | null> => {
 		try {
@@ -54,6 +66,10 @@ export const setQueries = {
 		try {
 			const db = await getDB();
 			const sets = db.getFirstAsync<Set>("SELECT * FROM sets WHERE id = ?;", setId);
+
+			// Update set updated at time when it's fetched
+			await db.runAsync("UPDATE sets SET updated_at = CURRENT_TIMESTAMP WHERE id = ?", setId);
+
 			return sets;
 		} catch (err) {
 			console.error(`Error getting sets by id: ${err}`)

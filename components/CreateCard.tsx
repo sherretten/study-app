@@ -16,10 +16,10 @@ export default function CreateCard(props: { card: FlashCard, updateCard: (card: 
 			</View>
 			<View style={{ flexDirection: 'row' }}>
 				<View style={{ flexBasis: '50%' }}>
-					<TextInput mode='outlined' multiline style={Globals.input} label='Term' value={props.card.term} onChangeText={(text) => handleChange('term', text)} />
+					<TextInput multiline style={Globals.input} label='Term' value={props.card.term} onChangeText={(text) => handleChange('term', text)} />
 				</View>
 				<View style={{ flexBasis: '50%' }}>
-					<TextInput mode='outlined' multiline style={Globals.input} label='Definition' value={props.card.definition} onChangeText={(text) => handleChange('definition', text)} />
+					<TextInput multiline style={Globals.input} label='Definition' value={props.card.definition} onChangeText={(text) => handleChange('definition', text)} />
 				</View>
 			</View>
 			<View>
@@ -36,6 +36,7 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		padding: 10,
 		borderRadius: 6,
-		borderWidth: 4,
+		borderWidth: 1,
+		marginBottom: 2,
 	},
 });

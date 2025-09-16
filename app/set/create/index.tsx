@@ -33,12 +33,7 @@ export default function CreateSet() {
 			setLoading(true);
 			console.debug(setName);
 			const newSetId = await setQueries.createSet({ name: setName, class_id: +courseId });
-			const sets = await setQueries.getSets();
-			console.debug(sets);
-
-			for (const card of cards) {
-				await cardQueries.upsertCard(card);
-			}
+			await cardQueries.createCards(cards, newSetId);
 
 			//We want to route to the set view;
 			router.push(`/set/${newSetId}`);
@@ -65,9 +60,9 @@ export default function CreateSet() {
 
 			{cards.map(card => <CreateCard key={card.id} card={card} updateCard={updateCard} removeCard={deleteCard} />)}
 
-			<Button style={styles.button} mode='outlined' onPress={addCard}>Add Card</Button>
+			<Button style={{ ...styles.button, backgroundColor: theme.colors.primary }} icon='plus' textColor='black' mode='outlined' onPress={addCard}>Add Card</Button>
 
-			<Button mode='outlined' disabled={!setName} onPress={handleSave} loading={loading}>Save</Button>
+			<Button mode='outlined' buttonColor={theme.colors.primary} textColor='black' icon='save' disabled={!setName} onPress={handleSave} loading={loading}>Save</Button>
 		</ScrollView>
 	)
 }

@@ -25,8 +25,14 @@ export const classQueries = {
 	updateClass: async () => {
 		const db = await getDB();
 	},
-	deleteClass: async (classId: Pick<Class, "id">) => {
-		const db = await getDB();
+	deleteClass: async (classId: number) => {
+		try {
+			const db = await getDB();
+			await db.runAsync("DELETE FROM class WHERE id = ?", classId);
+		} catch (err) {
+			console.error(`Error deleting class: ${err}`);
+			throw new Error("Error deleting class, please try again later");
+		}
 	},
 	getClasses: async (): Promise<Class[]> => {
 		try {

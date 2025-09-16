@@ -2,7 +2,7 @@ import { classQueries } from '@/db/queries/classQueries';
 import { router } from 'expo-router';
 import { useCallback, useEffect, useState } from 'react';
 import { SafeAreaView, View } from 'react-native';
-import { Button, Card, IconButton, TextInput, useTheme } from 'react-native-paper';
+import { Button, Card, TextInput, useTheme } from 'react-native-paper';
 
 
 export default function Classes() {
@@ -18,11 +18,14 @@ export default function Classes() {
 		setClasses(classes);
 	}, []);
 
-	useEffect(() => { fetchClasses() }, [fetchClasses])
+	useEffect(() => {
+		fetchClasses()
+	}, [fetchClasses]);
 
 	const handleSave = useCallback(async () => {
 		try {
 			const res = await classQueries.createClass(courseName);
+			fetchClasses();
 			console.log("Successfully saved class", res)
 			setShowAdd(false);
 		} catch (err) {
@@ -39,7 +42,7 @@ export default function Classes() {
 			backgroundColor: theme.colors.background,
 		}}>
 			{/* Add button that drops down an input */}
-			<IconButton style={{ justifyContent: 'flex-end' }} mode='outlined' onPress={() => setShowAdd(!showAdd)} icon='plus'></IconButton>
+			<Button style={{ justifyContent: 'flex-end', backgroundColor: theme.colors.primary }} mode='outlined' onPress={() => setShowAdd(!showAdd)} icon='plus'>Add Course</Button>
 			{showAdd &&
 				<Card>
 					<Card.Title title='New Course'></Card.Title>

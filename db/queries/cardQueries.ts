@@ -14,28 +14,41 @@ export const cardQueries = {
 			FOREIGN KEY (set_id) REFERENCES sets(id));
 		`)
 	},
-	upsertCard: async (card: Partial<Card>) => {
+	upsertCards: async (cards: Partial<Card>[], setId: number) => {
 		const db = await getDB();
-		const now = new Date().toISOString();
 		
-		return new Promise((resolve, reject) => {
-			db.withTransactionAsync(async () => {
+		await db.withTransactionAsync(async () => {
+			for (const card of cards) {
+				console.debug(card.id || crypto.randomUUID(), card.term, card.definition, card.set_id);
 				await db.runAsync(`
-					INSERT INTO cards (id, term, definition, set_id, created_at)
-					VALUES (?, ?, ?, ?, ?)
+					INSERT INTO cards (id, term, definition, set_id)
+					VALUES (?, ?, ?, ?)
 					ON CONFLICT(id) DO UPDATE SET
 						term = excluded.term,
 						definition = excluded.definition,
-						set_id = excluded.set_id
-				`, [
-					card.id || null,
+						set_id = excluded.set_id;
+				`,
+					card.id || crypto.randomUUID(),
 					card.term,
 					card.definition,
-					card.set_id,
-					card.created_at || now
-				]);
-			});
+					setId
+				);
+			}
 		});
+	},
+	createCards: async (cards: Omit<Card, 'id' | 'created_at'>[], setId: number) => {
+		try {
+			const db = await getDB();
+			await db.withTransactionAsync(async () => {
+				for (const card of cards) {
+					await db.runAsync("INSERT INTO cards (term, definition, set_id) VALUES (?, ?, ?);", [card.term, card.definition, setId]);
+				}
+			})
+			return;
+		} catch (err) {
+			console.error(`Error creating cards: ${err}`);
+			return;
+		}
 	},
 	getCardsBySetId: async (setId: number): Promise<Card[] | null> => {
 		try {

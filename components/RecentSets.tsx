@@ -1,11 +1,12 @@
 import { setQueries } from '@/db/queries/setQueries';
-import { useCallback, useState } from 'react';
+import { Link } from 'expo-router';
+import { useCallback, useEffect, useState } from 'react';
 import { View } from 'react-native';
-import { useTheme } from 'react-native-paper';
+import { Button, useTheme } from 'react-native-paper';
 
 
 export default function RecentSets() {
-	const [sets, setSets] = useState();
+	const [sets, setSets] = useState([]);
 
 	const theme = useTheme();
 
@@ -20,9 +21,21 @@ export default function RecentSets() {
 		}
 	}, []);
 
+	useEffect(() => {
+		fetchData();
+	}, [fetchData]);
+
 	return (
 		<View style={{}}>
-
+			{sets.map(set =>
+				<View key={set.id} style={{ margin: 2 }}>
+					<Button mode='outlined' buttonColor={theme.colors.onPrimary}>
+						<Link href={`/set/${set.id}`} style={{}}>
+							{set.name}
+						</Link>
+					</Button>
+				</View>
+			)}
 		</View>
 	)
 }

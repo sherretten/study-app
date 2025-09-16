@@ -5,7 +5,7 @@ let db: SQLite.SQLiteDatabase | null = null;
 
 export async function getDB() {
 	if (!db) {
-		db = await SQLite.openDatabaseAsync('example.db');
+		db = await SQLite.openDatabaseAsync('study-app.db');
 	}
 	return db;
 }

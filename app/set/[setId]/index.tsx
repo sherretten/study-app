@@ -1,7 +1,7 @@
 import FlashCard from '@/components/FlashCard';
 import { cardQueries } from '@/db/queries/cardQueries';
 import { setQueries } from '@/db/queries/setQueries';
-import { Link, Stack, useFocusEffect, useLocalSearchParams } from 'expo-router';
+import { Link, useFocusEffect, useLocalSearchParams } from 'expo-router';
 import { useCallback, useState } from 'react';
 import { View } from 'react-native';
 import { Button, IconButton, Text, useTheme } from 'react-native-paper';
@@ -36,7 +36,6 @@ export default function SetView() {
 			alignItems: 'center',
 			backgroundColor: theme.colors.background,
 		}}>
-			<Stack.Screen options={{ headerShown: true, headerBackButtonMenuEnabled: true }} />
 			<Text variant='displayLarge'>{data?.name}</Text>
 
 			<Button buttonColor={theme.colors.onPrimary} mode='outlined'><Link href={`/set/${setId}/edit?courseId=${data?.class_id}`}>Edit Cards</Link></Button>

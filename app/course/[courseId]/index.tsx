@@ -45,11 +45,15 @@ export default function Course() {
 				<Link style={{ color: 'black' }} href={`/set/create?courseId=${courseId}`}>Create Set</Link>
 			</Button>
 
-			{sets.map(set => <View key={set.id} style={{ margin: 2 }}>
-				<Button mode='outlined' buttonColor={theme.colors.onPrimary}>
-					<Link href={`/set/${set.id}`} style={{}}>
-						{set.name} </Link></Button>
-			</View>)}
+			{sets.map(set =>
+				<View key={set.id} style={{ margin: 2 }}>
+					<Button mode='outlined' buttonColor={theme.colors.onPrimary}>
+						<Link href={`/set/${set.id}`} style={{}}>
+							{set.name}
+						</Link>
+					</Button>
+				</View>
+			)}
 
 		</SafeAreaView>
 	)

@@ -3,5 +3,14 @@
     "source.fixAll": "explicit",
     "source.organizeImports": "explicit",
     "source.sortMembers": "explicit"
-  }
+	},
+	"sqltools.connections": [
+		{
+			"previewLimit": 50,
+			"driver": "SQLite",
+			"database": "example.db",
+			"name": "example-study-app"
+		}
+	],
+	"sqltools.useNodeRuntime": true
 }
