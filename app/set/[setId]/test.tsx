@@ -1,7 +1,8 @@
 import TestCard from '@/components/TestCard';
 import { FlashCard } from '@/constants/Types';
+import { cardQueries } from '@/db/queries/cardQueries';
+import { setQueries } from '@/db/queries/setQueries';
 import { Stack, useLocalSearchParams } from 'expo-router';
-import { useSQLiteContext } from 'expo-sqlite';
 import { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
 import { Button, TextInput, useTheme } from 'react-native-paper';
@@ -15,14 +16,11 @@ export default function EditSet() {
 	const [loading, setLoading] = useState(false);
 
 	const theme = useTheme();
-	const db = useSQLiteContext();
-
 
 	useEffect(() => {
 		const fetchCards = async () => {
 			try {
-				const cardsRes = await db.getAllAsync("SELECT * from cards where set_id = ?;", setId);
-				const set = await db.getFirstAsync("SELECT * FROM sets WHERE id = ?;", setId);
+				const [cardsRes, set] = await Promise.all([cardQueries.getCardsBySetId(+setId), setQueries.getSetById(+setId)]);
 
 				setSetName(set.name);
 				setCards(cardsRes);
@@ -31,7 +29,7 @@ export default function EditSet() {
 			}
 		};
 		fetchCards();
-	}, [db, setId])
+	}, [setId])
 
 
 

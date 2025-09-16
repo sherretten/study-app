@@ -1,6 +1,7 @@
 import FlashCard from '@/components/FlashCard';
+import { cardQueries } from '@/db/queries/cardQueries';
+import { setQueries } from '@/db/queries/setQueries';
 import { Link, Stack, useFocusEffect, useLocalSearchParams } from 'expo-router';
-import { useSQLiteContext } from 'expo-sqlite';
 import { useCallback, useState } from 'react';
 import { View } from 'react-native';
 import { Button, IconButton, Text, useTheme } from 'react-native-paper';
@@ -13,21 +14,14 @@ export default function SetView() {
 	const [cards, setCards] = useState([]);
 	const [viewingIndex, setIndex] = useState(0);
 
-	const db = useSQLiteContext();
 	const theme = useTheme();
 
 	const loadData = useCallback(async () => {
-		try {
-			const setRes = await db.getFirstAsync("SELECT * FROM sets WHERE id = ?", [setId]);
-			console.debug(setRes)
-			const cardRes = await db.getAllAsync("SELECT * FROM cards WHERE set_id = ?", [setId])
-			console.debug(cardRes)
-			setData(setRes);
-			setCards(cardRes);
-		} catch (err) {
-			console.error("Error fetching set:", err);
-		}
-	}, [db, setId])
+		const [cardRes, setRes] = await Promise.all([cardQueries.getCardsBySetId(+setId), setQueries.getSetById(+setId)]);
+
+		setData(setRes);
+		setCards(cardRes);
+	}, [setId])
 
 	useFocusEffect(
 		useCallback(() => {

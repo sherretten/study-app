@@ -1,5 +1,7 @@
 import CreateCard from '@/components/CreateCard';
 import { FlashCard } from '@/constants/Types';
+import { cardQueries } from '@/db/queries/cardQueries';
+import { setQueries } from '@/db/queries/setQueries';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import { useSQLiteContext } from 'expo-sqlite';
 import { useEffect, useState } from 'react';
@@ -23,19 +25,13 @@ export default function EditSet() {
 
 	useEffect(() => {
 		const fetchCards = async () => {
-			try {
-				const cardsRes = await db.getAllAsync("SELECT * from cards where set_id = ?;", setId);
-				const set = await db.getFirstAsync("SELECT * FROM sets WHERE id = ?;", setId);
+			const [cardsRes, set] = await Promise.all([cardQueries.getCardsBySetId(+setId), setQueries.getSetById(+setId)]);
+			setSetName(set.name);
 
-				setSetName(set.name);
-
-				if (cardsRes.length === 0) {
-					addCard();
-				} else {
-					setCards(cardsRes);
-				}
-			} catch (err) {
-				console.error(`Error fetching cards for set: ${setId}`, err);
+			if (cardsRes.length === 0) {
+				addCard();
+			} else {
+				setCards(cardsRes);
 			}
 		};
 		fetchCards();
@@ -43,7 +39,7 @@ export default function EditSet() {
 
 	async function deleteCard(cardId: number) {
 		try {
-			await db.runAsync("DELETE FROM cards WHERE id = ?", cardId);
+			await cardQueries.deleteCardById(cardId)
 			setCards(cards => {
 				const card = cards.filter(c => c.id !== cardId);
 				return card;

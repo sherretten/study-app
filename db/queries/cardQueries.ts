@@ -37,10 +37,23 @@ export const cardQueries = {
 			});
 		});
 	},
-	getCardsBySetId: async (setId: number): Promise<Card[]> => {
-		const db = await getDB();
+	getCardsBySetId: async (setId: number): Promise<Card[] | null> => {
+		try {
+			const db = await getDB();
+			const cards = await db.getAllAsync<Card>("SELECT * FROM cards WHERE set_id = ?;", setId);
+			return cards;
+		} catch (err) {
+			console.error(`Error getting cards by set id ${err}`)
+			return null;
+		}
 	},
 	deleteCardById: async (cardId: number) => {
-		const db = await getDB();
+		try {
+			const db = await getDB();
+			await db.runAsync("DELETE from cards WHERE id = ?", cardId);
+		} catch (err) {
+			console.error(`Error deleting card: ${err}`);
+			return;
+		}
 	},
 }

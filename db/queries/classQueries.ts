@@ -12,8 +12,15 @@ export const classQueries = {
 			created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 			);`)
 	},
-	createClass: async (Class: Omit<Class, 'id' | 'updated_at' |'created_at'>) => {
-		const db = await getDB();
+	createClass: async (className: string) => {
+		try {
+			const db = await getDB();
+			const newClass = await db.runAsync("INSERT INTO class (name) VALUES (?)", className);
+			return newClass;
+		} catch (err) {
+			console.error(`Error creating class: ${err}`);
+			return null;
+		}
 	},
 	updateClass: async () => {
 		const db = await getDB();
@@ -31,7 +38,14 @@ export const classQueries = {
 			return [];
 		}
 	},
-	getClassById: async () => {
-		const db = await getDB();
+	getClassById: async (classId: number): Promise<Class | null> => {
+		try {
+			const db = await getDB();
+			const course = await db.getFirstAsync("SELECT * FROM class WHERE id = ?", classId);
+			return course as Class;
+		} catch (err) {
+			console.error(`Error fetching class: ${err}`);
+			return null;
+		}
 	},
 }

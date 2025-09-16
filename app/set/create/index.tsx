@@ -1,7 +1,8 @@
 import CreateCard from '@/components/CreateCard';
 import { FlashCard } from '@/constants/Types';
+import { cardQueries } from '@/db/queries/cardQueries';
+import { setQueries } from '@/db/queries/setQueries';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
-import { useSQLiteContext } from 'expo-sqlite';
 import { useState } from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
 import { Button, TextInput, useTheme } from 'react-native-paper';
@@ -14,7 +15,6 @@ export default function CreateSet() {
 	const [loading, setLoading] = useState(false);
 
 	const theme = useTheme();
-	const db = useSQLiteContext();
 	const router = useRouter();
 
 	function addCard() {
@@ -32,21 +32,16 @@ export default function CreateSet() {
 		try {
 			setLoading(true);
 			console.debug(setName);
-			const setRes = await db.runAsync("INSERT INTO sets (name, class_id) VALUES (?, ?);", setName, courseId);
-			// const setRes = { lastInsertRowId: 3 };
-			const sets = await db.getAllAsync("SELECT * from sets;");
+			const newSetId = await setQueries.createSet({ name: setName, class_id: +courseId });
+			const sets = await setQueries.getSets();
 			console.debug(sets);
 
-			await db.withTransactionAsync(async () => {
-				for (const card of cards) {
-					await db.runAsync(`INSERT INTO cards (term, definition, set_id) VALUES (?, ?, ?)`, [card.term, card.definition, setRes.lastInsertRowId]);
-				}
-			})
-			const cardsRest = await db.getAllAsync("SELECT * from cards where set_id = ?;", setRes.lastInsertRowId);
+			for (const card of cards) {
+				await cardQueries.upsertCard(card);
+			}
 
-			console.debug(cardsRest);
 			//We want to route to the set view;
-			router.push(`/set/${setRes.lastInsertRowId}`);
+			router.push(`/set/${newSetId}`);
 		} catch (err) {
 			console.error("Error creating set or cards", err)
 		} finally {

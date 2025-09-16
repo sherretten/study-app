@@ -1,5 +1,6 @@
-import { Link, Stack, useLocalSearchParams } from 'expo-router';
-import { useSQLiteContext } from 'expo-sqlite';
+import { classQueries } from '@/db/queries/classQueries';
+import { setQueries } from '@/db/queries/setQueries';
+import { Link, Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import { useCallback, useEffect, useState } from 'react';
 import { SafeAreaView, View } from 'react-native';
 import { Button, useTheme } from 'react-native-paper';
@@ -9,23 +10,24 @@ export default function Course() {
 	const [course, setCourse] = useState('');
 	const [sets, setSets] = useState([]);
 
-	const { courseId } = useLocalSearchParams();
+	const { courseId } = useLocalSearchParams<{ courseId: string }>();
 	const theme = useTheme();
-	const db = useSQLiteContext();
+	const router = useRouter();
 
 	const fetchData = useCallback(async () => {
-		try {
-			const [className, sets] = await Promise.all([
-				db.getFirstAsync("SELECT name FROM class WHERE id = ?", [courseId]),
-				db.getAllAsync("SELECT * from sets WHERE class_id = ?", [courseId])
-			]);
+		const [course, sets] = await Promise.all([
+			classQueries.getClassById(+courseId),
+			setQueries.getSetsByClassId(+courseId),
+		]);
 
-			setCourse(className.name);
-			setSets(sets);
-		} catch (err) {
-			console.error("Error fetching class and set", err);
+		if (course === null || sets === null) {
+			router.back();
+			return;
 		}
-	}, [db, courseId])
+
+		setCourse(course?.name);
+		setSets(sets);
+	}, [courseId, router])
 
 	useEffect(() => {
 		fetchData();

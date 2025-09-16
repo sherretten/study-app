@@ -1,5 +1,5 @@
+import { classQueries } from '@/db/queries/classQueries';
 import { router } from 'expo-router';
-import { useSQLiteContext } from 'expo-sqlite';
 import { useCallback, useEffect, useState } from 'react';
 import { SafeAreaView, View } from 'react-native';
 import { Button, Card, IconButton, TextInput, useTheme } from 'react-native-paper';
@@ -12,29 +12,23 @@ export default function Classes() {
 	const [courseName, setCourseName] = useState('');
 
 	const theme = useTheme();
-	const db = useSQLiteContext();
 
 	const fetchClasses = useCallback(async () => {
-		try {
-			const res = await db.getAllAsync("SELECT * FROM class");
-			console.debug("Classes", res);
-			setClasses(res);
-		} catch (err) {
-			console.error('Error grabbing classes', err);
-		}
-	}, [db]);
+		const classes = await classQueries.getClasses();
+		setClasses(classes);
+	}, []);
 
 	useEffect(() => { fetchClasses() }, [fetchClasses])
 
 	const handleSave = useCallback(async () => {
 		try {
-			const res = await db.runAsync(`INSERT INTO class (name) VALUES (?) RETURNING id, name`, [courseName])
+			const res = await classQueries.createClass(courseName);
 			console.log("Successfully saved class", res)
 			setShowAdd(false);
 		} catch (err) {
 			console.error("error adding new course", err)
 		}
-	}, [courseName, db]);
+	}, [courseName]);
 
 	return (
 		<SafeAreaView style={{

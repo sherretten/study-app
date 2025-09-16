@@ -1,18 +1,17 @@
 import { Globals } from '@/constants/BaseStyles';
+import { classQueries } from '@/db/queries/classQueries';
 import { router } from 'expo-router';
-import { useSQLiteContext } from 'expo-sqlite';
 import { useState } from 'react';
 import { Button, SafeAreaView, Text } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 
 
 export default function CreateClass() {
-	const [className, setClassName] = useState(' ');
-	const db = useSQLiteContext();
+	const [className, setClassName] = useState('');
 
 	async function handleSave() {
 		try {
-			await db.runAsync("INSERT INTO class (name) values (?);", [className])
+			await classQueries.createClass(className);
 			router.back();
 		} catch (err) {
 			console.error('Error saving new class', err);
