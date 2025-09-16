@@ -1,3 +1,17 @@
+
+import * as SQLite from 'expo-sqlite';
+
+let db: SQLite.SQLiteDatabase | null = null;
+
+export async function getDB() {
+	if (!db) {
+		db = await SQLite.openDatabaseAsync('example.db');
+	}
+	return db;
+}
+
+
+
 // import * as SQLite from 'expo-sqlite';
 
 // 	const db = await SQLite.openDatabaseAsync('study-app');
