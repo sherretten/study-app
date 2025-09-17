@@ -73,7 +73,7 @@ export default function EditSet() {
 
 
 	return (
-		<ScrollView style={{ backgroundColor: theme.colors.background }}>
+		<ScrollView style={{ backgroundColor: theme.colors.background, padding: 4 }}>
 			<TextInput label="Title" value={setName} onChangeText={text => setSetName(text)} />
 
 			{cards.map(card => <CreateCard key={card.id} card={card} updateCard={updateCard} removeCard={deleteCard} />)}

@@ -10,8 +10,7 @@ export default function Index() {
 		<SafeAreaView
 			style={{
 				flex: 1,
-				justifyContent: "center",
-				alignItems: "center",
+				margin: 16,
 				backgroundColor: theme.colors.background,
 			}}>
 			<Classes />

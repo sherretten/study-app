@@ -2,7 +2,7 @@ import { classQueries } from '@/db/queries/classQueries';
 import { router } from 'expo-router';
 import { useCallback, useEffect, useState } from 'react';
 import { SafeAreaView, View } from 'react-native';
-import { Button, Card, TextInput, useTheme } from 'react-native-paper';
+import { Button, Card, Text, TextInput, useTheme } from 'react-native-paper';
 
 
 export default function Classes() {
@@ -24,25 +24,25 @@ export default function Classes() {
 
 	const handleSave = useCallback(async () => {
 		try {
-			const res = await classQueries.createClass(courseName);
+			await classQueries.createClass(courseName);
 			fetchClasses();
-			console.log("Successfully saved class", res)
 			setShowAdd(false);
 		} catch (err) {
 			console.error("error adding new course", err)
 		}
-	}, [courseName]);
+	}, [courseName, fetchClasses]);
 
 	return (
 		<SafeAreaView style={{
 			flex: 1,
-			alignItems: "center",
 			justifyContent: "center",
-			gap: 1,
 			backgroundColor: theme.colors.background,
 		}}>
 			{/* Add button that drops down an input */}
-			<Button style={{ justifyContent: 'flex-end', backgroundColor: theme.colors.primary }} mode='outlined' onPress={() => setShowAdd(!showAdd)} icon='plus'>Add Course</Button>
+			<View style={{ justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>
+				<Text variant='bodyLarge'>Courses</Text>
+				<Button style={{ backgroundColor: theme.colors.primary, margin: 1 }} textColor='black' mode='outlined' onPress={() => setShowAdd(!showAdd)} icon='plus'>Add Course</Button>
+			</View>
 			{showAdd &&
 				<Card>
 					<Card.Title title='New Course'></Card.Title>

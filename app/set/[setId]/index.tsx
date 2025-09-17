@@ -4,7 +4,7 @@ import { setQueries } from '@/db/queries/setQueries';
 import { Link, useFocusEffect, useLocalSearchParams } from 'expo-router';
 import { useCallback, useState } from 'react';
 import { View } from 'react-native';
-import { Button, IconButton, Text, useTheme } from 'react-native-paper';
+import { Button, Text, useTheme } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 
@@ -32,29 +32,32 @@ export default function SetView() {
 	return (
 		<SafeAreaView style={{
 			flex: 1,
-			justifyContent: "center",
-			alignItems: 'center',
 			backgroundColor: theme.colors.background,
+			padding: 10,
 		}}>
-			<Text variant='displayLarge'>{data?.name}</Text>
-
-			<Button buttonColor={theme.colors.onPrimary} mode='outlined'><Link href={`/set/${setId}/edit?courseId=${data?.class_id}`}>Edit Cards</Link></Button>
+			<View style={{ justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>
+				<Text variant='displayLarge'>{data?.name}</Text>
+				<Button buttonColor={theme.colors.primary} textColor='black' icon='edit' mode='outlined'>
+					<Link href={`/set/${setId}/edit?courseId=${data?.class_id}`}>Edit Cards</Link>
+				</Button>
+			</View>
 
 			<View style={{
 				display: 'flex',
 				flexWrap: 'wrap',
 			}}>
-				{/* I think we want a new route for this? */}
-				<Button style={{ padding: 10, borderColor: theme.colors.primary }}><Link href={`/set/${setId}/test`}>Test</Link></Button>
+				<Button buttonColor={theme.colors.primary} textColor='black' icon='test-tube'>
+					<Link href={`/set/${setId}/test`}>Test</Link>
+				</Button>
 			</View>
 
 			{cards.length > 0 &&
 				<View style={{ display: 'flex', flexDirection: 'column' }}>
 					<FlashCard flashCard={cards[viewingIndex]} />
 					<View style={{ display: 'flex', flexDirection: 'row', alignItems: 'baseline', justifyContent: 'space-evenly' }}>
-						<IconButton icon='arrow-left' onPress={() => setIndex(index => --index)} disabled={viewingIndex === 0}></IconButton>
+						<Button buttonColor={theme.colors.primary} textColor='black' icon='arrow-left' onPress={() => setIndex(index => --index)} disabled={viewingIndex === 0}>Back</Button>
 						<Text>{viewingIndex + 1} / {cards.length}</Text>
-						<IconButton icon='arrow-right' onPress={() => setIndex(index => ++index)} disabled={viewingIndex === cards.length - 1}></IconButton>
+						<Button buttonColor={theme.colors.primary} textColor='black' icon='arrow-right' onPress={() => setIndex(index => ++index)} disabled={viewingIndex === cards.length - 1}>Next</Button>
 					</View>
 				</View>
 			}

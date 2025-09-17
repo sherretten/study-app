@@ -1,13 +1,14 @@
 import { setQueries } from '@/db/queries/setQueries';
-import { Link } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { useCallback, useEffect, useState } from 'react';
-import { View } from 'react-native';
-import { Button, useTheme } from 'react-native-paper';
+import { Pressable, View } from 'react-native';
+import { Card, Text, useTheme } from 'react-native-paper';
 
 
 export default function RecentSets() {
 	const [sets, setSets] = useState([]);
 
+	const router = useRouter();
 	const theme = useTheme();
 
 	const fetchData = useCallback(async () => {
@@ -26,16 +27,17 @@ export default function RecentSets() {
 	}, [fetchData]);
 
 	return (
-		<View style={{}}>
-			{sets.map(set =>
-				<View key={set.id} style={{ margin: 2 }}>
-					<Button mode='outlined' buttonColor={theme.colors.onPrimary}>
-						<Link href={`/set/${set.id}`} style={{}}>
-							{set.name}
-						</Link>
-					</Button>
-				</View>
-			)}
+		<View style={{ flex: 1, margin: 1 }}>
+			<Text variant='bodyLarge'>Recent Sets</Text>
+			<View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' }}>
+				{sets.map(set =>
+					<Pressable style={{ flexBasis: '48%' }} onPress={() => router.push(`/set/${set.id}`)} key={set.id}>
+						<Card style={{ alignItems: 'center', }} key={set.id}>
+							<Card.Title title={set.name} />
+						</Card>
+					</Pressable>
+				)}
+			</View>
 		</View>
 	)
 }
