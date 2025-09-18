@@ -4,8 +4,8 @@ import { cardQueries } from '@/db/queries/cardQueries';
 import { setQueries } from '@/db/queries/setQueries';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import { useState } from 'react';
-import { ScrollView, StyleSheet } from 'react-native';
-import { Button, TextInput, useTheme } from 'react-native-paper';
+import { Modal, ScrollView, StyleSheet, View } from 'react-native';
+import { Button, Card, Text, TextInput, useTheme } from 'react-native-paper';
 
 
 export default function CreateSet() {
@@ -13,6 +13,8 @@ export default function CreateSet() {
 	const [setName, setSetName] = useState('');
 	const [cards, setCards] = useState<FlashCard[]>([{ id: 1, term: '', definition: '' }])
 	const [loading, setLoading] = useState(false);
+	const [modalOpen, setModalOpen] = useState(false);
+	const [importString, setImportString] = useState('');
 
 	const theme = useTheme();
 	const router = useRouter();
@@ -26,6 +28,20 @@ export default function CreateSet() {
 			const card = cards.filter(c => c.id !== cardId);
 			return card;
 		})
+	}
+
+	function handleSaveImport() {
+		let newCards: FlashCard[] = [];
+
+		const set = importString.split('\n');
+		set.forEach((s) => {
+			let termSplit = s.split(',');
+			if (termSplit[0] && termSplit[1]) {
+				newCards.push({ id: Date.now(), term: termSplit[0], definition: termSplit[1] });
+			}
+		})
+
+		console.debug(newCards);
 	}
 
 	async function handleSave() {
@@ -54,22 +70,58 @@ export default function CreateSet() {
 
 
 	return (
-		<ScrollView style={{ backgroundColor: theme.colors.background }}>
+		<ScrollView style={{ paddingHorizontal: '10%', }}>
 			<Stack.Screen options={{ headerShown: true, title: 'Create Set', headerBackButtonMenuEnabled: true }} />
-			<TextInput label="Title" value={setName} onChangeText={text => setSetName(text)} />
+			<View style={{ marginTop: 16 }}>
+				<View style={{ justifyContent: 'space-between', alignItems: 'center', flexDirection: 'row' }}>
+					<Text variant='titleLarge'>Create a new flashcard set</Text>
+					<Button style={{ marginTop: 10, marginBottom: 10, backgroundColor: theme.colors.primary }}
+						icon='plus'
+						textColor='white'
+						mode='contained'
+						onPress={() => setModalOpen(true)}>
+						Import
+					</Button>
+				</View>
 
-			{cards.map(card => <CreateCard key={card.id} card={card} updateCard={updateCard} removeCard={deleteCard} />)}
+				<TextInput label="Title" value={setName} onChangeText={text => setSetName(text)} />
 
-			<Button style={{ ...styles.button, backgroundColor: theme.colors.primary }} icon='plus' textColor='black' mode='outlined' onPress={addCard}>Add Card</Button>
+				<View>
+					<Modal
+						style={{}}
+						animationType='slide'
+						transparent={false}
+						visible={modalOpen}
+						onRequestClose={() => setModalOpen(false)}>
+						<Card>
+							<Card.Title title='Import Flash Cards'></Card.Title>
+							<Card.Content>
+								<TextInput placeholder={`term 1,definition 1\nterm 2,definition 2\n...`}
+									value={importString}
+									multiline
+									label='Import your data'
+									onChangeText={(text) => setImportString(text)} />
+							</Card.Content>
+							<Card.Actions>
+								<Button onPress={() => setModalOpen(false)}>Cancel</Button>
+								<Button buttonColor={theme.colors.primary} textColor='white' onPress={handleSaveImport}>Save</Button>
+							</Card.Actions>
+						</Card>
+					</Modal>
+				</View>
 
-			<Button mode='outlined' buttonColor={theme.colors.primary} textColor='black' icon='save' disabled={!setName} onPress={handleSave} loading={loading}>Save</Button>
+				{cards.map(card => <CreateCard key={card.id} card={card} updateCard={updateCard} removeCard={deleteCard} />)}
+
+				<Button style={{ ...styles.button, backgroundColor: theme.colors.primary }} icon='plus' textColor='white' mode='outlined' onPress={addCard}>Add Card</Button>
+
+				<Button mode='outlined' buttonColor={theme.colors.primary} textColor='white' icon='save' disabled={!setName} onPress={handleSave} loading={loading}>Save</Button>
+			</View>
 		</ScrollView>
 	)
 }
 
 const styles = StyleSheet.create({
 	button: {
-		width: 'auto',
 		marginBottom: 10,
 	}
 })

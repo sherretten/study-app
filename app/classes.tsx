@@ -36,24 +36,32 @@ export default function Classes() {
 		<SafeAreaView style={{
 			flex: 1,
 			justifyContent: "center",
-			backgroundColor: theme.colors.background,
 		}}>
 			{/* Add button that drops down an input */}
 			<View style={{ justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>
 				<Text variant='bodyLarge'>Courses</Text>
-				<Button style={{ backgroundColor: theme.colors.primary, margin: 1 }} textColor='black' mode='outlined' onPress={() => setShowAdd(!showAdd)} icon='plus'>Add Course</Button>
+				<Button style={{ margin: 1 }} buttonColor={theme.colors.primary}
+					textColor='white'
+					mode='outlined'
+					onPress={() => setShowAdd(!showAdd)}
+					icon='plus'>
+					Add Course
+				</Button>
 			</View>
-			{showAdd &&
-				<Card>
-					<Card.Title title='New Course'></Card.Title>
-					<Card.Content>
-						<TextInput mode='outlined' placeholder='Course' value={courseName} onChangeText={(e) => setCourseName(e)} />
-					</Card.Content>
-					<Card.Actions>
-						<Button onPress={handleSave} loading={isSaving}>Save</Button>
-					</Card.Actions>
-				</Card>
-			}
+			<View>
+				{showAdd &&
+					<Card style={{ marginBottom: 16 }}>
+						<Card.Title title='New Course'></Card.Title>
+						<Card.Content>
+							<TextInput placeholder='Course' value={courseName} onChangeText={(e) => setCourseName(e)} />
+						</Card.Content>
+						<Card.Actions>
+							<Button onPress={() => { setCourseName(''); setShowAdd(false) }}>Cancel</Button>
+							<Button onPress={handleSave} loading={isSaving} disabled={courseName.length === 0}>Save</Button>
+						</Card.Actions>
+					</Card>
+				}
+			</View>
 			<View style={{ width: 100, }}>
 				{classes.map(course => {
 					return (

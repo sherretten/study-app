@@ -1,9 +1,9 @@
 import { classQueries } from '@/db/queries/classQueries';
 import { setQueries } from '@/db/queries/setQueries';
-import { Link, Stack, useLocalSearchParams, useRouter } from 'expo-router';
+import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import { useCallback, useEffect, useState } from 'react';
-import { SafeAreaView, View } from 'react-native';
-import { Button, useTheme } from 'react-native-paper';
+import { Pressable, SafeAreaView, View } from 'react-native';
+import { Button, Card, useTheme } from 'react-native-paper';
 
 
 export default function Course() {
@@ -36,25 +36,21 @@ export default function Course() {
 	return (
 		<SafeAreaView style={{
 			flex: 1,
-			justifyContent: "center",
-			alignItems: "center",
-			backgroundColor: theme.colors.background,
 		}}>
 			<Stack.Screen options={{ headerShown: true, title: course }} />
-			<Button mode='contained' style={{ backgroundColor: theme.colors.primary }}>
-				<Link style={{ color: 'black' }} href={`/set/create?courseId=${courseId}`}>Create Set</Link>
+			<Button mode='contained' buttonColor={theme.colors.primary} textColor='white' onPress={() => router.push(`/set/create?courseId=${courseId}`)}>
+				Create Set
 			</Button>
 
-			{sets.map(set =>
-				<View key={set.id} style={{ margin: 2 }}>
-					<Button mode='outlined' buttonColor={theme.colors.onPrimary}>
-						<Link href={`/set/${set.id}`} style={{}}>
-							{set.name}
-						</Link>
-					</Button>
-				</View>
-			)}
-
+			<View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' }}>
+				{sets.map(set =>
+					<Pressable style={{ flexBasis: '48%' }} onPress={() => router.push(`/set/${set.id}`)} key={set.id}>
+						<Card style={{ alignItems: 'center', }} key={set.id}>
+							<Card.Title title={set.name} />
+						</Card>
+					</Pressable>
+				)}
+			</View>
 		</SafeAreaView>
 	)
 }

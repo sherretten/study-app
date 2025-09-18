@@ -5,7 +5,7 @@ import { setQueries } from '@/db/queries/setQueries';
 import { Stack, useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
-import { Button, TextInput, useTheme } from 'react-native-paper';
+import { Button, Text, useTheme } from 'react-native-paper';
 
 
 export default function EditSet() {
@@ -34,9 +34,9 @@ export default function EditSet() {
 
 
 	return (
-		<ScrollView style={{ backgroundColor: theme.colors.background }}>
+		<ScrollView style={{ paddingHorizontal: '10%', }}>
 			<Stack.Screen options={{ title: 'Testing', headerBackButtonMenuEnabled: true }} />
-			<TextInput label="Title" value={setName} onChangeText={text => setSetName(text)} />
+			<Text variant='titleLarge'>Title</Text>
 
 			{cards.map(card => <TestCard key={card.id} flashCard={card} showResult={showResults} />)}
 

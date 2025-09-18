@@ -14,11 +14,11 @@ export default function CreateCard(props: { card: FlashCard, updateCard: (card: 
 			<View style={{ alignItems: "flex-end" }}>
 				<IconButton mode='contained' icon='trash' onPress={() => props.removeCard(props.card.id)}></IconButton>
 			</View>
-			<View style={{ flexDirection: 'row' }}>
-				<View style={{ flexBasis: '50%' }}>
+			<View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+				<View style={{ flexBasis: '48%' }}>
 					<TextInput multiline style={Globals.input} label='Term' value={props.card.term} onChangeText={(text) => handleChange('term', text)} />
 				</View>
-				<View style={{ flexBasis: '50%' }}>
+				<View style={{ flexBasis: '48%' }}>
 					<TextInput multiline style={Globals.input} label='Definition' value={props.card.definition} onChangeText={(text) => handleChange('definition', text)} />
 				</View>
 			</View>
@@ -27,7 +27,6 @@ export default function CreateCard(props: { card: FlashCard, updateCard: (card: 
 		</View>
 	)
 }
-
 
 const styles = StyleSheet.create({
 	container: {
