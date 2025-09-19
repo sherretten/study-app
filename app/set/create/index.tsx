@@ -33,11 +33,11 @@ export default function CreateSet() {
 	function handleSaveImport() {
 		let newCards: FlashCard[] = [];
 
-		const set = importString.split('\n');
+		const set = importString.split('\t');
 		set.forEach((s) => {
-			let termSplit = s.split(',');
+			let termSplit = s.split(';');
 			if (termSplit[0] && termSplit[1]) {
-				newCards.push({ id: Date.now(), term: termSplit[0], definition: termSplit[1] });
+				newCards.push({ id: Date.now(), term: termSplit[1], definition: termSplit[0] });
 			}
 		})
 
@@ -96,7 +96,7 @@ export default function CreateSet() {
 						<Card>
 							<Card.Title title='Import Flash Cards'></Card.Title>
 							<Card.Content>
-								<TextInput placeholder={`term 1,definition 1\nterm 2,definition 2\n...`}
+								<TextInput placeholder={`Export your set with "Term and Definition" with tab, and "Between Rows" to Semicolon`}
 									value={importString}
 									multiline
 									label='Import your data'
