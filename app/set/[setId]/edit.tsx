@@ -76,7 +76,7 @@ export default function EditSet() {
 		<ScrollView style={{ paddingHorizontal: '10%', }}>
 			<TextInput label="Title" value={setName} onChangeText={text => setSetName(text)} style={{ margin: 2 }} />
 
-			{cards.map(card => <CreateCard key={card.id} card={card} updateCard={updateCard} removeCard={deleteCard} />)}
+			{cards.map((card, i) => <CreateCard key={card.id} card={card} updateCard={updateCard} removeCard={deleteCard} index={i} />)}
 
 			<Button style={styles.button} mode='outlined' onPress={addCard}>Add Card</Button>
 

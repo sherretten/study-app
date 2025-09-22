@@ -32,14 +32,13 @@ export default function FlashCard(props: { flashCard: Card }) {
 		setShowAnswer(!showAnswer);
 	};
 
-	console.debug(props.flashCard);
 	return (
 		<Pressable onPress={flipCard} style={{ position: 'relative', width: 600, height: 300, alignSelf: 'center' }}>
 			<Animated.View style={[styles.card, { transform: [{ rotateX: frontInterpolate }] }]}>
 				<Text style={{ textAlign: 'center' }} variant='displayMedium'>{!showAnswer && props?.flashCard?.term}</Text>
 			</Animated.View>
 			<Animated.View style={[styles.card, styles.cardBack, { transform: [{ rotateX: backInterpolate }] }]}>
-				<Text style={{ textAlign: 'center', padding: 4 }} variant='labelMedium'>{showAnswer && props?.flashCard?.definition}</Text>
+				<Text style={{ textAlign: 'center', padding: 4 }} variant='displaySmall'>{showAnswer && props?.flashCard?.definition}</Text>
 			</Animated.View>
 		</Pressable>
 	)

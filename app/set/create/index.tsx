@@ -4,8 +4,8 @@ import { cardQueries } from '@/db/queries/cardQueries';
 import { setQueries } from '@/db/queries/setQueries';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import { useState } from 'react';
-import { Modal, ScrollView, StyleSheet, View } from 'react-native';
-import { Button, Card, Text, TextInput, useTheme } from 'react-native-paper';
+import { ScrollView, StyleSheet, View } from 'react-native';
+import { Button, Card, Modal, Portal, Text, TextInput, useTheme } from 'react-native-paper';
 
 
 export default function CreateSet() {
@@ -72,7 +72,7 @@ export default function CreateSet() {
 	return (
 		<ScrollView style={{ paddingHorizontal: '10%', }}>
 			<Stack.Screen options={{ headerShown: true, title: 'Create Set', headerBackButtonMenuEnabled: true }} />
-			<View style={{ marginTop: 16 }}>
+			<View style={{ marginTop: 16, gap: 5 }}>
 				<View style={{ justifyContent: 'space-between', alignItems: 'center', flexDirection: 'row' }}>
 					<Text variant='titleLarge'>Create a new flashcard set</Text>
 					<Button style={{ marginTop: 10, marginBottom: 10, backgroundColor: theme.colors.primary }}
@@ -86,13 +86,13 @@ export default function CreateSet() {
 
 				<TextInput label="Title" value={setName} onChangeText={text => setSetName(text)} />
 
-				<View>
+				<Portal>
 					<Modal
-						style={{}}
-						animationType='slide'
-						transparent={false}
+						style={{ marginHorizontal: '20%' }}
+						// animationType='slide'
 						visible={modalOpen}
-						onRequestClose={() => setModalOpen(false)}>
+						dismissable
+						onDismiss={() => setModalOpen(false)}>
 						<Card>
 							<Card.Title title='Import Flash Cards'></Card.Title>
 							<Card.Content>
@@ -108,9 +108,9 @@ export default function CreateSet() {
 							</Card.Actions>
 						</Card>
 					</Modal>
-				</View>
+				</Portal>
 
-				{cards.map(card => <CreateCard key={card.id} card={card} updateCard={updateCard} removeCard={deleteCard} />)}
+				{cards.map((card, i) => <CreateCard key={card.id} card={card} index={i} updateCard={updateCard} removeCard={deleteCard} />)}
 
 				<Button style={{ ...styles.button, backgroundColor: theme.colors.primary }} icon='plus' textColor='white' mode='outlined' onPress={addCard}>Add Card</Button>
 

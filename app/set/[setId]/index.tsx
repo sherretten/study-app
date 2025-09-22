@@ -1,10 +1,11 @@
+import EditCardModal from '@/components/EditCardModal';
 import FlashCard from '@/components/FlashCard';
 import { cardQueries } from '@/db/queries/cardQueries';
 import { setQueries } from '@/db/queries/setQueries';
 import { Link, useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
 import { useCallback, useState } from 'react';
 import { View } from 'react-native';
-import { Button, Text, useTheme } from 'react-native-paper';
+import { Button, IconButton, Text, useTheme } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 
@@ -13,6 +14,7 @@ export default function SetView() {
 	const [data, setData] = useState();
 	const [cards, setCards] = useState([]);
 	const [viewingIndex, setIndex] = useState(0);
+	const [modalOpen, setModalOpen] = useState(false);
 
 	const theme = useTheme();
 	const router = useRouter();
@@ -23,6 +25,23 @@ export default function SetView() {
 		setData(setRes);
 		setCards(cardRes);
 	}, [setId])
+
+	const handleClose = useCallback(() => {
+		loadData();
+		setModalOpen(false);
+	}, [loadData])
+
+	const handleShuffle = useCallback(() => {
+		let cardsCopy = [...cards];
+		for (let i = 0; i < cards.length; i++) {
+			let j = Math.floor(Math.random() * (i + 1));
+			[cardsCopy[i], cardsCopy[j]] = [cardsCopy[j], cardsCopy[i]];
+		}
+
+		console.debug(cardsCopy);
+		setCards(cardsCopy);
+		setIndex(0);
+	}, [cards]);
 
 	useFocusEffect(
 		useCallback(() => {
@@ -45,10 +64,15 @@ export default function SetView() {
 
 			<View style={{
 				display: 'flex',
+				flexDirection: 'row',
+				gap: 2,
 				flexWrap: 'wrap',
 			}}>
 				<Button buttonColor={theme.colors.primary} textColor='white' icon='test-tube' onPress={() => router.push(`/set/${setId}/test`)}>
 					Test
+				</Button>
+				<Button buttonColor={theme.colors.primary} textColor='white' icon='test-tube' onPress={handleShuffle}>
+					Shuffle
 				</Button>
 			</View>
 
@@ -56,16 +80,30 @@ export default function SetView() {
 				<View style={{ display: 'flex', flexDirection: 'column' }}>
 					<FlashCard flashCard={cards[viewingIndex]} />
 					<View style={{ display: 'flex', flexDirection: 'row', alignItems: 'baseline', justifyContent: 'space-evenly' }}>
-						<Button buttonColor={theme.colors.primary} textColor='white' icon='arrow-left' onPress={() => setIndex(index => --index)} disabled={viewingIndex === 0}>Back</Button>
-						<Text>{viewingIndex + 1} / {cards.length}</Text>
+						<Button
+							buttonColor={theme.colors.primary}
+							textColor='white'
+							icon='arrow-left'
+							onPress={() => setIndex(index => --index)}
+							disabled={viewingIndex === 0}>
+							Back
+						</Button>
+						<View style={{ alignItems: 'center' }}>
+							<IconButton icon='edit' onPress={() => {
+								setModalOpen(true);
+							}} style={{ backgroundColor: theme.colors.secondary }}></IconButton>
+							<Text>{viewingIndex + 1} / {cards.length}</Text>
+						</View>
 						<Button buttonColor={theme.colors.primary} textColor='white' icon='arrow-right' onPress={() => setIndex(index => ++index)} disabled={viewingIndex === cards.length - 1}>Next</Button>
 					</View>
+					<EditCardModal card={cards[viewingIndex]} onClose={handleClose} open={modalOpen} />
 				</View>
 				:
 				<View>
 					<Text style={{ textAlign: 'center' }} variant='titleLarge'>You have no cards for this set. Edit the set to add cards.</Text>
 				</View>
 			}
+
 		</SafeAreaView>
 	)
 }

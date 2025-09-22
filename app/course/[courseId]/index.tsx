@@ -36,11 +36,15 @@ export default function Course() {
 	return (
 		<SafeAreaView style={{
 			flex: 1,
+			marginHorizontal: '10%',
+			gap: 5,
 		}}>
 			<Stack.Screen options={{ headerShown: true, title: course }} />
-			<Button mode='contained' buttonColor={theme.colors.primary} textColor='white' onPress={() => router.push(`/set/create?courseId=${courseId}`)}>
-				Create Set
-			</Button>
+			<View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 5 }}>
+				<Button icon='add' buttonColor={theme.colors.primary} textColor='white' onPress={() => router.push(`/set/create?courseId=${courseId}`)}>
+					Create Set
+				</Button>
+			</View>
 
 			<View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' }}>
 				{sets.map(set =>
