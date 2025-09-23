@@ -89,7 +89,6 @@ export default function CreateSet() {
 				<Portal>
 					<Modal
 						style={{ marginHorizontal: '20%' }}
-						// animationType='slide'
 						visible={modalOpen}
 						dismissable
 						onDismiss={() => setModalOpen(false)}>
