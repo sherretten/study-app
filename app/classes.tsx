@@ -6,7 +6,7 @@ import { Button, Card, Text, TextInput, useTheme } from 'react-native-paper';
 
 
 export default function Classes() {
-	const [classes, setClasses] = useState<{ id: number, name: string }[]>([{ id: 1, name: 'Evidence Based Practice' }, { id: 2, name: 'Neuro' }, { id: 3, name: "Community Engagement" }]);
+	const [classes, setClasses] = useState<{ id: number, name: string }[]>([]);
 	const [showAdd, setShowAdd] = useState(false);
 	const [isSaving, setIsSaving] = useState(false);
 	const [courseName, setCourseName] = useState('');
