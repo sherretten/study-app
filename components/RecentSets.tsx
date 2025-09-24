@@ -1,8 +1,8 @@
 import { setQueries } from '@/db/queries/setQueries';
 import { useRouter } from 'expo-router';
 import { useCallback, useEffect, useState } from 'react';
-import { Pressable, View } from 'react-native';
-import { Card, Text } from 'react-native-paper';
+import { Pressable, StyleSheet, View } from 'react-native';
+import { Card, Icon, Text } from 'react-native-paper';
 
 
 export default function RecentSets() {
@@ -26,13 +26,16 @@ export default function RecentSets() {
 	}, [fetchData]);
 
 	return (
-		<View style={{ flex: 1, margin: 1 }}>
-			<Text variant='bodyLarge'>Recent Sets</Text>
-			<View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 10 }}>
+		<View style={styles.container}>
+			<Text variant='displaySmall'>Recent Sets</Text>
+			<View style={styles.setContainer}>
 				{sets.map(set =>
 					<Pressable style={{}} onPress={() => router.push(`/set/${set.id}`)} key={set.id}>
-						<Card style={{ alignItems: 'center', }} key={set.id}>
-							<Card.Title title={set.name} />
+						<Card key={set.id}>
+							<Card.Content style={styles.setContentContainer}>
+								<Icon size={20} source='cards'></Icon>
+								<Text>{set.name}</Text>
+							</Card.Content>
 						</Card>
 					</Pressable>
 				)}
@@ -40,3 +43,20 @@ export default function RecentSets() {
 		</View>
 	)
 }
+
+const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+		margin: 1,
+	},
+	setContainer: {
+		flexDirection: 'row',
+		flexWrap: 'wrap',
+		gap: 10,
+	},
+	setContentContainer: {
+		flexDirection: 'row',
+		gap: 4,
+		alignItems: 'center',
+	}
+});

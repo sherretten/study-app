@@ -1,11 +1,22 @@
 import { FlashCard as Card } from '@/constants/Types';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Animated, Pressable, StyleSheet } from 'react-native';
 import { Text } from 'react-native-paper';
 
 export default function FlashCard(props: { flashCard: Card }) {
 	const [showAnswer, setShowAnswer] = useState(false)
 	const animatedValue = useRef(new Animated.Value(0)).current;
+
+	useEffect(() => {
+		if (showAnswer) {
+			Animated.spring(animatedValue, {
+				toValue: 0,
+				useNativeDriver: true,
+			}).start();
+			setShowAnswer(false);
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [props.flashCard]);
 
 	const frontInterpolate = animatedValue.interpolate({
 		inputRange: [0, 180],
@@ -33,7 +44,7 @@ export default function FlashCard(props: { flashCard: Card }) {
 	};
 
 	return (
-		<Pressable onPress={flipCard} style={{ position: 'relative', width: 600, height: 300, alignSelf: 'center' }}>
+		<Pressable onPress={flipCard} style={styles.cardContainer}>
 			<Animated.View style={[styles.card, { transform: [{ rotateX: frontInterpolate }] }]}>
 				<Text style={{ textAlign: 'center' }} variant='displayMedium'>{!showAnswer && props?.flashCard?.term}</Text>
 			</Animated.View>
@@ -45,6 +56,11 @@ export default function FlashCard(props: { flashCard: Card }) {
 }
 
 const styles = StyleSheet.create({
+	cardContainer: {
+		position: 'relative',
+		width: '100%',
+		minHeight: 300,
+	},
 	card: {
 		width: '100%',
 		height: '100%',

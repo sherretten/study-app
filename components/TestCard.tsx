@@ -1,7 +1,7 @@
-import { FlashCard as Card } from '@/constants/Types';
+import { FlashCard as Cards } from '@/constants/Types';
 import { useEffect, useMemo, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Button, Text, TextInput, useTheme } from 'react-native-paper';
+import { Button, Card, Text, TextInput, useTheme } from 'react-native-paper';
 
 const normalize = (str: string) => str.toLocaleLowerCase().trim().replace(/[^\w\s]/g, '');
 
@@ -34,7 +34,7 @@ function cosineSimilarity(str1: string, str2: string) {
 	return dotProduct / (Math.sqrt(magnitude1) * Math.sqrt(magnitude2)) || 0;
 }
 
-export default function TestCard(props: { flashCard: Card, showResult: boolean, updateAnswer: (cardId, answer, isCorrect) => void }) {
+export default function TestCard(props: { flashCard: Cards, showResult: boolean, updateAnswer: (cardId, answer, isCorrect) => void }) {
 	const [answer, setAnswer] = useState('');
 	const [showAnswer, setShowAnswer] = useState(false)
 
@@ -60,32 +60,34 @@ export default function TestCard(props: { flashCard: Card, showResult: boolean, 
 	}, [answer, isCorrect, props.flashCard.id])
 
 	return (
-		<View style={styles.container}>
-			<Text variant='headlineMedium'>{props.flashCard.term}</Text>
-			{props.showResult ?
-				<Text style={{ color: isCorrect ? 'green' : 'red' }} variant='headlineSmall'>{answer || 'No answer provided'}</Text>
-				:
-				<TextInput multiline onChangeText={(text) => setAnswer(text)} value={answer}></TextInput>
-			}
+		<Card style={styles.container}>
+			<Card.Title title={props.flashCard.term} />
+			<Card.Content>
+				{props.showResult ?
+					<Text style={{ color: isCorrect ? 'green' : 'red' }} variant='headlineSmall'>{answer || 'No answer provided'}</Text>
+					:
+					<TextInput multiline onChangeText={(text) => setAnswer(text)} value={answer}></TextInput>
+				}
 
-			{(showAnswer || (props.showResult && !isCorrect)) &&
-				<View>
-					<Text variant='headlineMedium'>Correct Answer:</Text>
-					<Text variant='headlineSmall' style={{ color: 'green' }}>{props.flashCard.definition}</Text>
-				</View>
-			}
+				{(showAnswer || (props.showResult && !isCorrect)) &&
+					<View>
+						<Text variant='headlineMedium'>Correct Answer:</Text>
+						<Text variant='headlineSmall' style={{ color: 'green' }}>{props.flashCard.definition}</Text>
+					</View>
+				}
 
-			{!props.showResult &&
-				<View style={{ alignSelf: 'flex-end' }}>
-					<Button style={{ marginTop: 5, }}
-						buttonColor={theme.colors.primary}
-						textColor='white'
-						onPress={() => setShowAnswer(!showAnswer)}>
-						{showAnswer ? 'Hide' : 'Show'} answer
-					</Button>
-				</View>
-			}
-		</View>
+				{!props.showResult &&
+					<View style={{ alignSelf: 'flex-end' }}>
+						<Button style={{ marginTop: 5, }}
+							buttonColor={theme.colors.primary}
+							textColor='white'
+							onPress={() => setShowAnswer(!showAnswer)}>
+							{showAnswer ? 'Hide' : 'Show'} answer
+						</Button>
+					</View>
+				}
+			</Card.Content>
+		</Card>
 	)
 }
 
@@ -97,8 +99,6 @@ const styles = StyleSheet.create({
 		flexDirection: 'column',
 		justifyContent: 'center',
 		padding: 10,
-		borderRadius: 6,
-		borderWidth: 1,
-		marginBottom: 5,
+		marginVertical: '1%',
 	},
 });

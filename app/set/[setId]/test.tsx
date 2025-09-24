@@ -45,11 +45,6 @@ export default function EditSet() {
 
 			{cards.map(card => <TestCard key={card.id} flashCard={card} showResult={showResults} updateAnswer={handleUpdateAnswer} />)}
 
-			{/* <View style={{ flexDirection: 'column', borderRadius: 5, borderColor: 'black', borderWidth: 1 }}>
-				<Text variant='displayLarge' style={{ textAlign: 'center' }}>Results</Text>
-				<Text variant='headlineLarge'>{results.filter(res => res.isCorrect).length}/{results.length}</Text>
-			</View> */}
-
 			<View style={{ flexDirection: 'row', justifyContent: 'center' }}>
 				<Button
 					style={styles.button}

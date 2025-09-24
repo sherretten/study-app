@@ -1,7 +1,7 @@
 import { classQueries } from '@/db/queries/classQueries';
 import { router } from 'expo-router';
 import { useCallback, useEffect, useState } from 'react';
-import { SafeAreaView, View } from 'react-native';
+import { SafeAreaView, StyleSheet, View } from 'react-native';
 import { Button, Card, Text, TextInput, useTheme } from 'react-native-paper';
 
 
@@ -33,13 +33,9 @@ export default function Classes() {
 	}, [courseName, fetchClasses]);
 
 	return (
-		<SafeAreaView style={{
-			flex: 1,
-			justifyContent: "center",
-		}}>
-			{/* Add button that drops down an input */}
+		<SafeAreaView style={styles.container}>
 			<View style={{ justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>
-				<Text variant='bodyLarge'>Courses</Text>
+				<Text variant='displaySmall'>Courses</Text>
 				<Button style={{ margin: 1 }} buttonColor={theme.colors.primary}
 					textColor='white'
 					mode='outlined'
@@ -74,3 +70,15 @@ export default function Classes() {
 		</SafeAreaView>
 	)
 }
+
+const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+		justifyContent: 'center',
+	},
+	header: {
+		justifyContent: 'space-between',
+		flexDirection: 'row',
+		alignItems: 'center',
+	},
+})

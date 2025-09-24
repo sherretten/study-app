@@ -5,3 +5,13 @@ export type FlashCard = {
 	term: string,
 	definition: string,
 }
+
+
+export type TextInputSizeChangeEvent = {
+	nativeEvent: {
+		contentSize: {
+			width: number,
+			height: number,
+		}
+	}
+}

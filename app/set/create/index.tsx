@@ -40,8 +40,6 @@ export default function CreateSet() {
 				newCards.push({ id: Date.now(), term: termSplit[1], definition: termSplit[0] });
 			}
 		})
-
-		console.debug(newCards);
 	}
 
 	async function handleSave() {
@@ -51,7 +49,6 @@ export default function CreateSet() {
 			const newSetId = await setQueries.createSet({ name: setName, class_id: +courseId });
 			await cardQueries.createCards(cards, newSetId);
 
-			//We want to route to the set view;
 			router.push(`/set/${newSetId}`);
 		} catch (err) {
 			console.error("Error creating set or cards", err)
@@ -67,7 +64,6 @@ export default function CreateSet() {
 			return [...cards];
 		})
 	}
-
 
 	return (
 		<ScrollView style={{ paddingHorizontal: '10%', }}>
@@ -111,16 +107,36 @@ export default function CreateSet() {
 
 				{cards.map((card, i) => <CreateCard key={card.id} card={card} index={i} updateCard={updateCard} removeCard={deleteCard} />)}
 
-				<Button style={{ ...styles.button, backgroundColor: theme.colors.primary }} icon='plus' textColor='white' mode='outlined' onPress={addCard}>Add Card</Button>
+				<View style={styles.buttonContainer}>
+					<Button
+						buttonColor={theme.colors.primary}
+						icon='plus'
+						textColor='white'
+						mode='outlined'
+						onPress={addCard}>
+						Add Card
+					</Button>
 
-				<Button mode='outlined' buttonColor={theme.colors.primary} textColor='white' icon='save' disabled={!setName} onPress={handleSave} loading={loading}>Save</Button>
+					<Button
+						mode='outlined'
+						buttonColor={theme.colors.primary}
+						textColor='white'
+						disabled={!setName}
+						onPress={handleSave}
+						loading={loading}>
+						Save
+					</Button>
+				</View>
 			</View>
 		</ScrollView>
 	)
 }
 
 const styles = StyleSheet.create({
-	button: {
-		marginBottom: 10,
+	buttonContainer: {
+		flexDirection: 'row',
+		justifyContent: 'flex-end',
+		alignItems: 'center',
+		gap: 10,
 	}
 })

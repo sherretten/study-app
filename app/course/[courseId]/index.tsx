@@ -2,8 +2,8 @@ import { classQueries } from '@/db/queries/classQueries';
 import { setQueries } from '@/db/queries/setQueries';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import { useCallback, useEffect, useState } from 'react';
-import { Pressable, SafeAreaView, View } from 'react-native';
-import { Button, Card, useTheme } from 'react-native-paper';
+import { Pressable, SafeAreaView, StyleSheet, View } from 'react-native';
+import { Button, Card, Icon, Text, useTheme } from 'react-native-paper';
 
 
 export default function Course() {
@@ -34,27 +34,54 @@ export default function Course() {
 	}, [fetchData]);
 
 	return (
-		<SafeAreaView style={{
-			flex: 1,
-			marginHorizontal: '10%',
-			gap: 5,
-		}}>
+		<SafeAreaView style={styles.container}>
 			<Stack.Screen options={{ headerShown: true, title: course }} />
-			<View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 5 }}>
-				<Button icon='add' buttonColor={theme.colors.primary} textColor='white' onPress={() => router.push(`/set/create?courseId=${courseId}`)}>
-					Create Set
-				</Button>
-			</View>
+			<Card>
+				<Card.Content>
+					<View style={styles.topRow}>
+						<Button icon='plus' buttonColor={theme.colors.primary} textColor='white' onPress={() => router.push(`/set/create?courseId=${courseId}`)}>
+							Create Set
+						</Button>
+					</View>
 
-			<View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' }}>
-				{sets.map(set =>
-					<Pressable style={{ flexBasis: '48%' }} onPress={() => router.push(`/set/${set.id}`)} key={set.id}>
-						<Card style={{ alignItems: 'center', }} key={set.id}>
-							<Card.Title title={set.name} />
-						</Card>
-					</Pressable>
-				)}
-			</View>
+					<View style={styles.setContainer}>
+						{sets.map(set =>
+							<Pressable onPress={() => router.push(`/set/${set.id}`)} key={set.id}>
+								<Card key={set.id}>
+									<Card.Content style={styles.setContentContainer}>
+										<Icon size={20} source='cards'></Icon>
+										<Text>{set.name}</Text>
+									</Card.Content>
+								</Card>
+							</Pressable>
+						)}
+					</View>
+				</Card.Content>
+			</Card>
 		</SafeAreaView>
 	)
 }
+
+const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+		marginHorizontal: '15%',
+		marginTop: '5%',
+		gap: 5,
+	},
+	topRow: {
+		flexDirection: 'row',
+		justifyContent: 'flex-end',
+		marginTop: 5
+	},
+	setContainer: {
+		flexDirection: 'row',
+		flexWrap: 'wrap',
+		gap: 10,
+	},
+	setContentContainer: {
+		flexDirection: 'row',
+		gap: 4,
+		alignItems: 'center',
+	}
+});

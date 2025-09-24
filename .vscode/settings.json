@@ -12,5 +12,8 @@
 			"name": "example-study-app"
 		}
 	],
-	"sqltools.useNodeRuntime": true
+	"sqltools.useNodeRuntime": true,
+	"cSpell.words": [
+		"dismissable"
+	]
 }
