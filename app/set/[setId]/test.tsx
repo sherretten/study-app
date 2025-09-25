@@ -59,6 +59,7 @@ export default function EditSet() {
 }
 
 const styles = StyleSheet.create({
+
 	button: {
 		width: 'auto',
 		marginBottom: 10,

@@ -45,10 +45,10 @@ export default function FlashCard(props: { flashCard: Card }) {
 
 	return (
 		<Pressable onPress={flipCard} style={styles.cardContainer}>
-			<Animated.View style={[styles.card, { transform: [{ rotateX: frontInterpolate }] }]}>
+			<Animated.View style={[styles.card, { transform: [{ rotateX: frontInterpolate }], overflow: 'scroll' }]}>
 				<Text style={{ textAlign: 'center' }} variant='displayMedium'>{!showAnswer && props?.flashCard?.term}</Text>
 			</Animated.View>
-			<Animated.View style={[styles.card, styles.cardBack, { transform: [{ rotateX: backInterpolate }] }]}>
+			<Animated.View style={[styles.card, styles.cardBack, { transform: [{ rotateX: backInterpolate }], overflow: 'scroll' }]}>
 				<Text style={{ textAlign: 'center', padding: 4 }} variant='displaySmall'>{showAnswer && props?.flashCard?.definition}</Text>
 			</Animated.View>
 		</Pressable>

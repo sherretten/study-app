@@ -80,8 +80,6 @@ export default function CreateSet() {
 					</Button>
 				</View>
 
-				<TextInput label="Title" value={setName} onChangeText={text => setSetName(text)} />
-
 				<Portal>
 					<Modal
 						style={{ marginHorizontal: '20%' }}
@@ -105,28 +103,34 @@ export default function CreateSet() {
 					</Modal>
 				</Portal>
 
-				{cards.map((card, i) => <CreateCard key={card.id} card={card} index={i} updateCard={updateCard} removeCard={deleteCard} />)}
+				<Card>
+					<Card.Content style={styles.cardContainer}>
+						<TextInput label="Title" value={setName} onChangeText={text => setSetName(text)} />
 
-				<View style={styles.buttonContainer}>
-					<Button
-						buttonColor={theme.colors.primary}
-						icon='plus'
-						textColor='white'
-						mode='outlined'
-						onPress={addCard}>
-						Add Card
-					</Button>
+						{cards.map((card, i) => <CreateCard key={card.id} card={card} index={i} updateCard={updateCard} removeCard={deleteCard} />)}
 
-					<Button
-						mode='outlined'
-						buttonColor={theme.colors.primary}
-						textColor='white'
-						disabled={!setName}
-						onPress={handleSave}
-						loading={loading}>
-						Save
-					</Button>
-				</View>
+						<View style={styles.buttonContainer}>
+							<Button
+								buttonColor={theme.colors.primary}
+								icon='plus'
+								textColor='white'
+								mode='outlined'
+								onPress={addCard}>
+								Add Card
+							</Button>
+
+							<Button
+								mode='outlined'
+								buttonColor={theme.colors.primary}
+								textColor='white'
+								disabled={!setName}
+								onPress={handleSave}
+								loading={loading}>
+								Save
+							</Button>
+						</View>
+					</Card.Content>
+				</Card>
 			</View>
 		</ScrollView>
 	)
@@ -137,6 +141,9 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		justifyContent: 'flex-end',
 		alignItems: 'center',
+		gap: 10,
+	},
+	cardContainer: {
 		gap: 10,
 	}
 })

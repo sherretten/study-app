@@ -2,7 +2,7 @@ import { Globals } from '@/constants/BaseStyles';
 import { FlashCard, TextInputSizeChangeEvent } from '@/constants/Types';
 import { useCallback, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { IconButton, Text, TextInput } from 'react-native-paper';
+import { Card, IconButton, Text, TextInput } from 'react-native-paper';
 
 
 export default function CreateCard(props: { card: FlashCard, index: number, updateCard: (card: FlashCard) => void, removeCard: (id: number) => void }) {
@@ -22,32 +22,34 @@ export default function CreateCard(props: { card: FlashCard, index: number, upda
 
 
 	return (
-		<View style={styles.container}>
-			<View style={styles.topBar}>
-				<Text variant='headlineMedium'>{props.index}</Text>
-				<IconButton mode='contained' icon='trash-can' onPress={() => props.removeCard(props.card.id)}></IconButton>
-			</View>
-			<View style={styles.topBar}>
-				<View style={styles.textInput}>
-					<TextInput
-						multiline
-						style={[Globals.input, { height: termHeight }]}
-						label='Term'
-						value={props.card.term}
-						onContentSizeChange={handleTermHeightChange}
-						onChangeText={(text) => handleChange('term', text)} />
+		<Card style={styles.container}>
+			<Card.Content>
+				<View style={styles.topBar}>
+					<Text variant='headlineMedium'>{props.index}</Text>
+					<IconButton mode='contained' icon='trash-can' onPress={() => props.removeCard(props.card.id)}></IconButton>
 				</View>
-				<View style={styles.textInput}>
-					<TextInput
-						multiline
-						onContentSizeChange={handleDefinitionHeightChange}
-						style={[Globals.input, { height: definitionHeight }]}
-						label='Definition'
-						value={props.card.definition}
-						onChangeText={(text) => handleChange('definition', text)} />
+				<View style={styles.topBar}>
+					<View style={styles.textInput}>
+						<TextInput
+							multiline
+							style={[Globals.input, { height: termHeight }]}
+							label='Term'
+							value={props.card.term}
+							onContentSizeChange={handleTermHeightChange}
+							onChangeText={(text) => handleChange('term', text)} />
+					</View>
+					<View style={styles.textInput}>
+						<TextInput
+							multiline
+							onContentSizeChange={handleDefinitionHeightChange}
+							style={[Globals.input, { height: definitionHeight }]}
+							label='Definition'
+							value={props.card.definition}
+							onChangeText={(text) => handleChange('definition', text)} />
+					</View>
 				</View>
-			</View>
-		</View>
+			</Card.Content>
+		</Card>
 	)
 }
 
@@ -57,8 +59,6 @@ const styles = StyleSheet.create({
 		flexDirection: 'column',
 		justifyContent: 'center',
 		padding: 10,
-		borderRadius: 6,
-		borderWidth: 1,
 		marginBottom: 2,
 	},
 	topBar: {

@@ -5,8 +5,8 @@ import { setQueries } from '@/db/queries/setQueries';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useSQLiteContext } from 'expo-sqlite';
 import { useCallback, useEffect, useState } from 'react';
-import { ScrollView, StyleSheet } from 'react-native';
-import { Button, TextInput, useTheme } from 'react-native-paper';
+import { ScrollView, StyleSheet, View } from 'react-native';
+import { Button, Card, TextInput } from 'react-native-paper';
 
 
 export default function EditSet() {
@@ -15,7 +15,6 @@ export default function EditSet() {
 	const [cards, setCards] = useState<FlashCard[]>([])
 	const [loading, setLoading] = useState(false);
 
-	const theme = useTheme();
 	const db = useSQLiteContext();
 	const router = useRouter();
 
@@ -71,23 +70,38 @@ export default function EditSet() {
 		})
 	}
 
-
 	return (
-		<ScrollView style={{ paddingHorizontal: '10%', }}>
-			<TextInput label="Title" value={setName} onChangeText={text => setSetName(text)} style={{ margin: 2 }} />
+		<ScrollView style={styles.container}>
+			<Card>
+				<Card.Content style={styles.cardContainer}>
+					<TextInput label="Title" value={setName} onChangeText={text => setSetName(text)} style={{ margin: 2 }} />
 
-			{cards.map((card, i) => <CreateCard key={card.id} card={card} updateCard={updateCard} removeCard={deleteCard} index={i} />)}
+					{cards.map((card, i) => <CreateCard key={card.id} card={card} updateCard={updateCard} removeCard={deleteCard} index={i} />)}
 
-			<Button style={styles.button} mode='outlined' onPress={addCard}>Add Card</Button>
+					<View style={styles.buttonContainer}>
+						<Button mode='outlined' onPress={addCard}>Add Card</Button>
 
-			<Button mode='outlined' disabled={!setName} onPress={handleSave} loading={loading}>Save</Button>
+						<Button mode='outlined' disabled={!setName} onPress={handleSave} loading={loading}>Save</Button>
+					</View>
+
+				</Card.Content>
+			</Card>
 		</ScrollView>
 	)
 }
 
 const styles = StyleSheet.create({
-	button: {
-		width: 'auto',
-		marginBottom: 10,
+	container: {
+		paddingHorizontal: '15%' //Using padding horizontal here since the scrollbar would be close to it with margin.
+	},
+	buttonContainer: {
+		flexDirection: 'row',
+		justifyContent: 'flex-end',
+		alignItems: 'center',
+		gap: 10,
+		marginTop: 10,
+	},
+	cardContainer: {
+		gap: 10,
 	}
 })
