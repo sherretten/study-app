@@ -62,7 +62,7 @@ export default function Classes() {
 				{classes.map(course => {
 					return (
 						<Card style={{ marginBottom: 2, alignItems: 'center' }} key={course.id} onPress={() => router.push(`/course/${course.id}`)}>
-							<Card.Title title={course.name} />
+							<Card.Content>{course.name}</Card.Content>
 						</Card>
 					)
 				})}
