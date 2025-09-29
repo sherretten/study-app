@@ -1,9 +1,8 @@
 import { setQueries } from '@/db/queries/setQueries';
 import { useRouter } from 'expo-router';
 import { useCallback, useEffect, useState } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet } from 'react-native';
 import { Card, Icon, Text } from 'react-native-paper';
-
 
 export default function RecentSets() {
 	const [sets, setSets] = useState([]);
@@ -26,9 +25,9 @@ export default function RecentSets() {
 	}, [fetchData]);
 
 	return (
-		<View style={styles.container}>
-			<Text variant='displaySmall'>Recent Sets</Text>
-			<View style={styles.setContainer}>
+		<Card style={styles.container}>
+			<Card.Title title={<Text variant='displaySmall'>Recent Sets</Text>} />
+			<Card.Content style={styles.setContainer}>
 				{sets.map(set =>
 					<Pressable style={{}} onPress={() => router.push(`/set/${set.id}`)} key={set.id}>
 						<Card key={set.id}>
@@ -39,14 +38,13 @@ export default function RecentSets() {
 						</Card>
 					</Pressable>
 				)}
-			</View>
-		</View>
+			</Card.Content>
+		</Card>
 	)
 }
 
 const styles = StyleSheet.create({
 	container: {
-		flex: 1,
 		margin: 1,
 	},
 	setContainer: {
