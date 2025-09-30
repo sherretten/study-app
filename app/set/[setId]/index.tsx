@@ -1,4 +1,5 @@
 import EditCardModal from '@/components/EditCardModal';
+import ExportSetModal from '@/components/ExportSetModal';
 import FlashCard from '@/components/FlashCard';
 import { cardQueries } from '@/db/queries/cardQueries';
 import { setQueries } from '@/db/queries/setQueries';
@@ -15,6 +16,7 @@ export default function SetView() {
 	const [cards, setCards] = useState([]);
 	const [viewingIndex, setIndex] = useState(0);
 	const [modalOpen, setModalOpen] = useState(false);
+	const [exportModalOpen, setExportModalOpen] = useState(false);
 
 	const theme = useTheme();
 	const router = useRouter();
@@ -43,6 +45,7 @@ export default function SetView() {
 		setIndex(0);
 	}, [cards]);
 
+
 	useFocusEffect(
 		useCallback(() => {
 			loadData();
@@ -54,10 +57,13 @@ export default function SetView() {
 			<Card>
 				<Card.Content>
 					<View style={styles.topBarContainer}>
-						<Text variant='displayLarge'>{data?.name}</Text>
-						<Button buttonColor={theme.colors.primary} textColor='white' icon='pencil' mode='outlined'>
-							<Link href={`/set/${setId}/edit?courseId=${data?.class_id}`}>Edit Cards</Link>
-						</Button>
+						<Text variant='displayLarge' style={{ maxWidth: '80%' }}>{data?.name}</Text>
+						<View style={{ gap: 4 }}>
+							<Button buttonColor={theme.colors.primary} textColor='white' icon='export' onPress={() => setExportModalOpen(true)}>Export</Button>
+							<Button buttonColor={theme.colors.primary} textColor='white' icon='pencil' mode='outlined'>
+								<Link href={`/set/${setId}/edit?courseId=${data?.class_id}`}>Edit Cards</Link>
+							</Button>
+						</View>
 					</View>
 
 					<View style={styles.cardActions}>
@@ -68,6 +74,8 @@ export default function SetView() {
 							Shuffle
 						</Button>
 					</View>
+
+					<ExportSetModal cards={cards} open={exportModalOpen} onClose={() => setExportModalOpen(false)} />
 
 					{cards.length > 0 ?
 						<View style={styles.flashCardContainer}>

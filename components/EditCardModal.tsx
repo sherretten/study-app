@@ -4,14 +4,11 @@ import { useCallback, useState } from 'react';
 import { View } from 'react-native';
 import { Button, Modal, Portal, Text, TextInput, useTheme } from 'react-native-paper';
 
-
-
 export default function EditCardModal(props: { open: boolean, onClose: () => void, card: Card }) {
 	const [term, setTerm] = useState(props.card.term)
 	const [definition, setDefinition] = useState(props.card.definition);
 
 	const theme = useTheme();
-
 
 	const handleSave = useCallback(async () => {
 		try {
