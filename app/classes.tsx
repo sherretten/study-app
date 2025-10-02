@@ -58,10 +58,10 @@ export default function Classes() {
 						</Card>
 					}
 				</View>
-				<View style={{ width: 100 }}>
+				<View style={{ flexDirection: 'row', maxWidth: '90%', flexWrap: 'wrap' }}>
 					{classes.map(course => {
 						return (
-							<Card style={{ marginBottom: 2, alignItems: 'center' }} key={course.id} onPress={() => router.push(`/course/${course.id}`)}>
+							<Card style={{ marginBottom: 2, alignItems: 'center', minWidth: 100 }} key={course.id} onPress={() => router.push(`/course/${course.id}`)}>
 								<Card.Content><Text>{course.name}</Text></Card.Content>
 							</Card>
 						)
