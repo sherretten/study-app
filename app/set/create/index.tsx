@@ -3,7 +3,7 @@ import { FlashCard } from '@/constants/Types';
 import { cardQueries } from '@/db/queries/cardQueries';
 import { setQueries } from '@/db/queries/setQueries';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
-import { useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { Button, Card, Modal, Portal, Text, TextInput, useTheme } from 'react-native-paper';
 
@@ -15,12 +15,18 @@ export default function CreateSet() {
 	const [loading, setLoading] = useState(false);
 	const [modalOpen, setModalOpen] = useState(false);
 	const [importString, setImportString] = useState('');
+	const scrollViewRef = useRef<ScrollView>();
 
 	const theme = useTheme();
 	const router = useRouter();
 
+	const handleScrollToBottom = useCallback(() => {
+		scrollViewRef?.current.scrollToEnd({ animated: true });
+	}, []);
+
 	function addCard() {
 		setCards(cards => [...cards, { id: Date.now(), definition: '', term: '' }])
+		handleScrollToBottom();
 	}
 
 	async function deleteCard(cardId: number) {
@@ -66,19 +72,13 @@ export default function CreateSet() {
 	}
 
 	return (
-		<ScrollView style={{ paddingHorizontal: '10%', }}>
+		<ScrollView
+			style={{ paddingHorizontal: '10%', }}
+			ref={scrollViewRef}
+			alwaysBounceVertical
+			onContentSizeChange={() => scrollViewRef.current.scrollToEnd({ animated: true })}>
 			<Stack.Screen options={{ headerShown: true, title: 'Create Set', headerBackButtonMenuEnabled: true }} />
 			<View style={{ marginTop: 16, gap: 5 }}>
-				<View style={{ justifyContent: 'space-between', alignItems: 'center', flexDirection: 'row' }}>
-					<Text variant='titleLarge'>Create a new flashcard set</Text>
-					<Button style={{ marginTop: 10, marginBottom: 10, backgroundColor: theme.colors.primary }}
-						icon='plus'
-						textColor='white'
-						mode='contained'
-						onPress={() => setModalOpen(true)}>
-						Import
-					</Button>
-				</View>
 
 				<Portal>
 					<Modal
@@ -104,6 +104,16 @@ export default function CreateSet() {
 				</Portal>
 
 				<Card>
+					<View style={{ justifyContent: 'space-between', alignItems: 'center', flexDirection: 'row', padding: 15 }}>
+						<Text variant='titleLarge'>Create a new flashcard set</Text>
+						<Button style={{ marginTop: 10, marginBottom: 10, backgroundColor: theme.colors.primary }}
+							icon='plus'
+							textColor='white'
+							mode='contained'
+							onPress={() => setModalOpen(true)}>
+							Import
+						</Button>
+					</View>
 					<Card.Content style={styles.cardContainer}>
 						<TextInput label="Title" value={setName} onChangeText={text => setSetName(text)} />
 

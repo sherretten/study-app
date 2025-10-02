@@ -4,7 +4,7 @@ import { cardQueries } from '@/db/queries/cardQueries';
 import { setQueries } from '@/db/queries/setQueries';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useSQLiteContext } from 'expo-sqlite';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { Button, Card, TextInput } from 'react-native-paper';
 
@@ -14,13 +14,19 @@ export default function EditSet() {
 	const [setName, setSetName] = useState('');
 	const [cards, setCards] = useState<FlashCard[]>([])
 	const [loading, setLoading] = useState(false);
+	const scrollViewRef = useRef<ScrollView>(null);
 
 	const db = useSQLiteContext();
 	const router = useRouter();
 
+	const handleScrollToBottom = useCallback(() => {
+		scrollViewRef.current?.scrollToEnd({ animated: true });
+	}, []);
+
 	const addCard = useCallback(() => {
 		setCards(cards => [...cards, { id: Date.now(), definition: '', term: '', setId }])
-	}, [setId]);
+		handleScrollToBottom();
+	}, [handleScrollToBottom, setId]);
 
 	useEffect(() => {
 		const fetchCards = async () => {
@@ -71,10 +77,14 @@ export default function EditSet() {
 	}
 
 	return (
-		<ScrollView style={styles.container}>
+		<ScrollView style={styles.container} ref={scrollViewRef} onContentSizeChange={handleScrollToBottom}>
 			<Card>
 				<Card.Content style={styles.cardContainer}>
-					<TextInput label="Title" value={setName} onChangeText={text => setSetName(text)} style={{ margin: 2 }} />
+					<View style={styles.headerContainer}>
+						<TextInput label="Title" value={setName} onChangeText={text => setSetName(text)} style={{ margin: 2, flex: 1 }} />
+						<Button mode='outlined' onPress={addCard}>Add Card</Button>
+
+					</View>
 
 					{cards.map((card, i) => <CreateCard key={card.id} card={card} updateCard={updateCard} removeCard={deleteCard} index={i} />)}
 
@@ -103,5 +113,10 @@ const styles = StyleSheet.create({
 	},
 	cardContainer: {
 		gap: 10,
-	}
+	},
+	headerContainer: {
+		justifyContent: 'space-between',
+		flexDirection: 'row',
+		alignItems: 'center'
+	},
 })
