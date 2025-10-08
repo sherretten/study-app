@@ -5,7 +5,7 @@ import { StyleSheet, View } from 'react-native';
 import { Card, IconButton, Text, TextInput } from 'react-native-paper';
 
 
-export default function CreateCard(props: { card: FlashCard, index: number, updateCard: (card: FlashCard) => void, removeCard: (id: number) => void }) {
+export default function CreateCard(props: { card: FlashCard, index: number, updateCard: (card: FlashCard) => void, removeCard: (id: number) => void, autoFocus?: boolean }) {
 	const [termHeight, setTermHeight] = useState(50);
 	const [definitionHeight, setDefHeight] = useState(50);
 	const termRef = useRef(null);
@@ -15,7 +15,7 @@ export default function CreateCard(props: { card: FlashCard, index: number, upda
 	}
 
 	useEffect(() => {
-		if (termRef.current && !props.card.term) {
+		if (termRef.current && !props.card.term && props.autoFocus) {
 			termRef.current.focus();
 		}
 		//Only want this to happen on first load.

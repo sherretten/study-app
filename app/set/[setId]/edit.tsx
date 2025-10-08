@@ -86,7 +86,7 @@ export default function EditSet() {
 
 					</View>
 
-					{cards.map((card, i) => <CreateCard key={card.id} card={card} updateCard={updateCard} removeCard={deleteCard} index={i} />)}
+					{cards.map((card, i) => <CreateCard key={card.id} card={card} updateCard={updateCard} removeCard={deleteCard} index={i} autoFocus />)}
 
 					<View style={styles.buttonContainer}>
 						<Button mode='outlined' onPress={addCard}>Add Card</Button>
