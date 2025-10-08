@@ -1,6 +1,6 @@
 import { Globals } from '@/constants/BaseStyles';
 import { FlashCard, TextInputSizeChangeEvent } from '@/constants/Types';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Card, IconButton, Text, TextInput } from 'react-native-paper';
 
@@ -8,10 +8,19 @@ import { Card, IconButton, Text, TextInput } from 'react-native-paper';
 export default function CreateCard(props: { card: FlashCard, index: number, updateCard: (card: FlashCard) => void, removeCard: (id: number) => void }) {
 	const [termHeight, setTermHeight] = useState(50);
 	const [definitionHeight, setDefHeight] = useState(50);
+	const termRef = useRef(null);
 
 	const handleChange = (field: string, value: string) => {
 		props.updateCard({ ...props.card, [field]: value });
 	}
+
+	useEffect(() => {
+		if (termRef.current && !props.card.term) {
+			termRef.current.focus();
+		}
+		//Only want this to happen on first load.
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	const handleTermHeightChange = useCallback((e: TextInputSizeChangeEvent) => {
 		setTermHeight(Math.max(50, e.nativeEvent.contentSize.height));
@@ -34,6 +43,7 @@ export default function CreateCard(props: { card: FlashCard, index: number, upda
 							multiline
 							style={[Globals.input, { height: termHeight }]}
 							label='Term'
+							ref={termRef}
 							value={props.card.term}
 							onContentSizeChange={handleTermHeightChange}
 							onChangeText={(text) => handleChange('term', text)} />
