@@ -117,7 +117,7 @@ export default function CreateSet() {
 					<Card.Content style={styles.cardContainer}>
 						<TextInput label="Title" value={setName} onChangeText={text => setSetName(text)} autoFocus />
 
-						{cards.map((card, i) => <CreateCard key={card.id} card={card} index={i} updateCard={updateCard} removeCard={deleteCard} autoFocus={false} />)}
+						{cards.map((card, i) => <CreateCard key={card.id} card={card} index={i} updateCard={updateCard} removeCard={deleteCard} autoFocus={setName.length !== 0} />)}
 
 						<View style={styles.buttonContainer}>
 							<Button
