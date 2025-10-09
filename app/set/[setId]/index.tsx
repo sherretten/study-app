@@ -57,13 +57,7 @@ export default function SetView() {
 			<Card>
 				<Card.Content>
 					<View style={styles.topBarContainer}>
-						<Text variant='displayLarge' style={{ maxWidth: '80%' }}>{data?.name}</Text>
-						<View style={{ gap: 4 }}>
-							<Button buttonColor={theme.colors.primary} textColor='white' icon='export' onPress={() => setExportModalOpen(true)}>Export</Button>
-							<Button buttonColor={theme.colors.primary} textColor='white' icon='pencil' mode='outlined'>
-								<Link href={`/set/${setId}/edit?courseId=${data?.class_id}`}>Edit Cards</Link>
-							</Button>
-						</View>
+						<Text variant='displayMedium' style={{ maxWidth: '90%' }}>{data?.name}</Text>
 					</View>
 
 					<View style={styles.cardActions}>
@@ -72,6 +66,10 @@ export default function SetView() {
 						</Button>
 						<Button buttonColor={theme.colors.primary} textColor='white' icon='refresh' onPress={handleShuffle}>
 							Shuffle
+						</Button>
+						<Button buttonColor={theme.colors.primary} textColor='white' icon='export' onPress={() => setExportModalOpen(true)}>Export</Button>
+						<Button buttonColor={theme.colors.primary} textColor='white' icon='pencil' mode='outlined'>
+							<Link href={`/set/${setId}/edit?courseId=${data?.class_id}`}>Edit Cards</Link>
 						</Button>
 					</View>
 
