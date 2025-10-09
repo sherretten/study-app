@@ -41,7 +41,7 @@ export default function CreateCard(props: { card: FlashCard, index: number, upda
 					<View style={styles.textInput}>
 						<TextInput
 							multiline
-							style={[Globals.input, { height: termHeight }]}
+							style={[Globals.input, { minHeight: termHeight }]}
 							label='Term'
 							ref={termRef}
 							value={props.card.term}
@@ -52,7 +52,7 @@ export default function CreateCard(props: { card: FlashCard, index: number, upda
 						<TextInput
 							multiline
 							onContentSizeChange={handleDefinitionHeightChange}
-							style={[Globals.input, { height: definitionHeight }]}
+							style={[Globals.input, { minHeight: definitionHeight }]}
 							label='Definition'
 							value={props.card.definition}
 							onChangeText={(text) => handleChange('definition', text)} />
