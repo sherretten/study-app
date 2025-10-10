@@ -1,5 +1,6 @@
-import { FlashCard as Cards } from '@/constants/Types';
-import { useEffect, useMemo, useState } from 'react';
+import { Globals } from '@/constants/BaseStyles';
+import { FlashCard as Cards, TextInputSizeChangeEvent } from '@/constants/Types';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Button, Card, Text, TextInput, useTheme } from 'react-native-paper';
 
@@ -36,7 +37,8 @@ function cosineSimilarity(str1: string, str2: string) {
 
 export default function TestCard(props: { flashCard: Cards, showResult: boolean, updateAnswer: (cardId, answer, isCorrect) => void }) {
 	const [answer, setAnswer] = useState('');
-	const [showAnswer, setShowAnswer] = useState(false)
+	const [termHeight, setTermHeight] = useState(50);
+	const [showAnswer, setShowAnswer] = useState(false);
 
 	const theme = useTheme();
 
@@ -59,6 +61,10 @@ export default function TestCard(props: { flashCard: Cards, showResult: boolean,
 		props.updateAnswer(props.flashCard.id, answer, isCorrect);
 	}, [answer, isCorrect, props.flashCard.id])
 
+	const handleTermHeightChange = useCallback((e: TextInputSizeChangeEvent) => {
+		setTermHeight(Math.max(50, e.nativeEvent.contentSize.height));
+	}, []);
+
 	return (
 		<Card style={styles.container}>
 			<Card.Title title={props.flashCard.term} />
@@ -66,7 +72,7 @@ export default function TestCard(props: { flashCard: Cards, showResult: boolean,
 				{props.showResult ?
 					<Text style={{ color: isCorrect ? 'green' : 'red' }} variant='headlineSmall'>{answer || 'No answer provided'}</Text>
 					:
-					<TextInput multiline onChangeText={(text) => setAnswer(text)} value={answer}></TextInput>
+					<TextInput style={[Globals.input, { minHeight: termHeight }]} multiline onChangeText={(text) => setAnswer(text)} value={answer} onContentSizeChange={handleTermHeightChange}></TextInput>
 				}
 
 				{(showAnswer || (props.showResult && !isCorrect)) &&
