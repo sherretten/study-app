@@ -1,19 +1,22 @@
 import TestCard from '@/components/TestCard';
-import { FlashCard } from '@/constants/Types';
 import { cardQueries } from '@/db/queries/cardQueries';
+import { Card } from '@/db/types';
 import { Stack, useLocalSearchParams } from 'expo-router';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
-import { Button, useTheme } from 'react-native-paper';
+import { Button, Switch, Text, useTheme } from 'react-native-paper';
 
 
-export default function EditSet() {
+export default function TestSet() {
 	const { setId } = useLocalSearchParams<{ courseId: string, setId: string }>();
-	const [cards, setCards] = useState<FlashCard[]>([])
+	const [cards, setCards] = useState<Card[]>([])
 	const [showResults, setShowResults] = useState(false);
+	const [showOnlyFlagged, setFlagged] = useState(false);
 	const [results, setResults] = useState<{ cardId: number, answer: string, isCorrect: boolean }[]>([]);
 
 	const theme = useTheme();
+
+	console.debug(cards);
 
 	useEffect(() => {
 		const fetchCards = async () => {
@@ -29,21 +32,31 @@ export default function EditSet() {
 		fetchCards();
 	}, [setId])
 
-	console.debug(results);
 	const handleUpdateAnswer = useCallback((cardId, answer, isCorrect) => {
 		setResults(res => {
 			const index = res.findIndex(r => r.cardId === cardId);
 			res[index] = { cardId, answer, isCorrect };
 			return [...res];
 		})
-
 	}, []);
+
+	const shownCards = useMemo(() => {
+		if (showOnlyFlagged) {
+			return cards.filter(c => !!c.unknown);
+		}
+
+		return cards;
+	}, [cards, showOnlyFlagged]);
 
 	return (
 		<ScrollView style={{ paddingHorizontal: '10%' }} contentContainerStyle={{ justifyContent: 'center' }}>
+			<View style={styles.toggleContainer}>
+				<Switch value={showOnlyFlagged} onValueChange={() => setFlagged(flag => !flag)}></Switch>
+				<Text variant='titleLarge' style={{ color: 'white' }}>Show Flagged Only</Text>
+			</View>
 			<Stack.Screen options={{ title: 'Testing', headerBackButtonMenuEnabled: true }} />
 
-			{cards.map(card => <TestCard key={card.id} flashCard={card} showResult={showResults} updateAnswer={handleUpdateAnswer} />)}
+			{shownCards.map(card => <TestCard key={card.id} flashCard={card} showResult={showResults} updateAnswer={handleUpdateAnswer} />)}
 
 			<View style={{ flexDirection: 'row', justifyContent: 'center' }}>
 				<Button
@@ -59,9 +72,13 @@ export default function EditSet() {
 }
 
 const styles = StyleSheet.create({
-
 	button: {
 		width: 'auto',
 		marginBottom: 10,
+	},
+	toggleContainer: {
+		flexDirection: 'row',
+		gap: 2,
+		color: 'white',
 	}
 })

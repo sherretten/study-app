@@ -12,12 +12,13 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function SetView() {
 	const { setId } = useLocalSearchParams<{ setId: string }>();
-	const [data, setData] = useState();
+	const [set, setData] = useState();
 	const [cards, setCards] = useState([]);
 	const [viewingIndex, setIndex] = useState(0);
 	const [modalOpen, setModalOpen] = useState(false);
 	const [exportModalOpen, setExportModalOpen] = useState(false);
 
+	console.debug(cards);
 	const theme = useTheme();
 	const router = useRouter();
 
@@ -57,7 +58,7 @@ export default function SetView() {
 			<Card>
 				<Card.Content>
 					<View style={styles.topBarContainer}>
-						<Text variant='displayMedium' style={{ maxWidth: '90%' }}>{data?.name}</Text>
+						<Text variant='displayMedium' style={{ maxWidth: '90%' }}>{set?.name}</Text>
 					</View>
 
 					<View style={styles.cardActions}>
@@ -69,7 +70,7 @@ export default function SetView() {
 						</Button>
 						<Button buttonColor={theme.colors.primary} textColor='white' icon='export' onPress={() => setExportModalOpen(true)}>Export</Button>
 						<Button buttonColor={theme.colors.primary} textColor='white' icon='pencil' mode='outlined'>
-							<Link href={`/set/${setId}/edit?courseId=${data?.class_id}`}>Edit Cards</Link>
+							<Link href={`/set/${setId}/edit?courseId=${set?.class_id}`}>Edit Cards</Link>
 						</Button>
 					</View>
 

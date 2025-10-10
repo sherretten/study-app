@@ -9,6 +9,7 @@ export const cardQueries = {
 			id INTEGER PRIMARY KEY,
 			term TEXT NOT NULL,
 			definition TEXT NOT NULL,
+			unknown BOOLEAN DEFAULT FALSE,
 			created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 			set_id INTEGER NOT NULL,
 			FOREIGN KEY (set_id) REFERENCES sets(id));
@@ -21,16 +22,18 @@ export const cardQueries = {
 			for (const card of cards) {
 				console.debug(card.id || crypto.randomUUID(), card.term, card.definition, card.set_id);
 				await db.runAsync(`
-					INSERT INTO cards (id, term, definition, set_id)
-					VALUES (?, ?, ?, ?)
+					INSERT INTO cards (id, term, definition, unknown, set_id)
+					VALUES (?, ?, ?, ?, ?)
 					ON CONFLICT(id) DO UPDATE SET
 						term = excluded.term,
 						definition = excluded.definition,
+						unknown = excluded.unknown,
 						set_id = excluded.set_id;
 				`,
 					card.id || crypto.randomUUID(),
 					card.term,
 					card.definition,
+					card.unknown,
 					setId
 				);
 			}

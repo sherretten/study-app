@@ -19,6 +19,7 @@ export interface Card {
   definition: string;
   created_at: string; // ISO string format, has default
   set_id: number;     // Foreign key to sets.id
+	unknown: boolean;
 }
 
 // Types for creating new records (without auto-generated fields)

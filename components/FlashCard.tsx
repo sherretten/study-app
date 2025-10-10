@@ -1,7 +1,8 @@
-import { FlashCard as Card } from '@/constants/Types';
-import { useEffect, useRef, useState } from 'react';
-import { Animated, Pressable, StyleSheet } from 'react-native';
-import { Text } from 'react-native-paper';
+import { cardQueries } from '@/db/queries/cardQueries';
+import { Card } from '@/db/types';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { Animated, Pressable, StyleSheet, View } from 'react-native';
+import { IconButton, Text } from 'react-native-paper';
 
 export default function FlashCard(props: { flashCard: Card }) {
 	const [showAnswer, setShowAnswer] = useState(false)
@@ -43,13 +44,20 @@ export default function FlashCard(props: { flashCard: Card }) {
 		setShowAnswer(!showAnswer);
 	};
 
+	const handleFlagging = useCallback(async () => {
+		await cardQueries.upsertCards([{ ...props.flashCard, unknown: !props.flashCard.unknown }], props.flashCard.set_id);
+	}, [props.flashCard]);
+
 	return (
 		<Pressable onPress={flipCard} style={styles.cardContainer}>
+			<View style={styles.flagButton}>
+				<IconButton onPress={handleFlagging} mode='contained' icon={props.flashCard.unknown ? 'flag-variant' : 'flag-variant-outline'}></IconButton>
+			</View>
 			<Animated.View style={[styles.card, { transform: [{ rotateX: frontInterpolate }], overflow: 'scroll' }]}>
-				<Text style={{ textAlign: 'center', padding: 4 }} variant='displaySmall'>{!showAnswer && props?.flashCard?.term}</Text>
+				<Text style={styles.cardText} variant='displaySmall' adjustsFontSizeToFit>{!showAnswer && props?.flashCard?.term}</Text>
 			</Animated.View>
 			<Animated.View style={[styles.card, styles.cardBack, { transform: [{ rotateX: backInterpolate }], overflow: 'scroll' }]}>
-				<Text style={{ textAlign: 'center', padding: 4 }} variant='displaySmall'>{showAnswer && props?.flashCard?.definition}</Text>
+				<Text style={styles.cardText} variant='displaySmall' adjustsFontSizeToFit>{showAnswer && props?.flashCard?.definition}</Text>
 			</Animated.View>
 		</Pressable>
 	)
@@ -73,5 +81,15 @@ const styles = StyleSheet.create({
 	},
 	cardBack: {
 		backgroundColor: '#2196F3',
+	},
+	flagButton: {
+		position: 'absolute',
+		top: 10,
+		right: 20,
+		zIndex: 10,
+	},
+	cardText: {
+		textAlign: 'center',
+		padding: 4,
 	},
 });

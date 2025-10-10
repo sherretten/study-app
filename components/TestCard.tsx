@@ -1,8 +1,10 @@
 import { Globals } from '@/constants/BaseStyles';
-import { FlashCard as Cards, TextInputSizeChangeEvent } from '@/constants/Types';
+import { TextInputSizeChangeEvent } from '@/constants/Types';
+import { cardQueries } from '@/db/queries/cardQueries';
+import { Card as FlashCard } from '@/db/types';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Button, Card, Text, TextInput, useTheme } from 'react-native-paper';
+import { Button, Card, IconButton, Text, TextInput, useTheme } from 'react-native-paper';
 
 const normalize = (str: string) => str.toLocaleLowerCase().trim().replace(/[^\w\s]/g, '');
 
@@ -35,7 +37,7 @@ function cosineSimilarity(str1: string, str2: string) {
 	return dotProduct / (Math.sqrt(magnitude1) * Math.sqrt(magnitude2)) || 0;
 }
 
-export default function TestCard(props: { flashCard: Cards, showResult: boolean, updateAnswer: (cardId, answer, isCorrect) => void }) {
+export default function TestCard(props: { flashCard: FlashCard, showResult: boolean, updateAnswer: (cardId, answer, isCorrect) => void }) {
 	const [answer, setAnswer] = useState('');
 	const [termHeight, setTermHeight] = useState(50);
 	const [showAnswer, setShowAnswer] = useState(false);
@@ -65,9 +67,18 @@ export default function TestCard(props: { flashCard: Cards, showResult: boolean,
 		setTermHeight(Math.max(50, e.nativeEvent.contentSize.height));
 	}, []);
 
+	const handleFlagging = useCallback(async () => {
+		await cardQueries.upsertCards([{ ...props.flashCard, unknown: !props.flashCard.unknown }], props.flashCard.set_id);
+	}, [props.flashCard]);
+
 	return (
 		<Card style={styles.container}>
-			<Card.Title title={props.flashCard.term} />
+			<Card.Title
+				title={
+					<View style={styles.topBar}>
+						<Text>{props.flashCard.term}</Text>
+						<IconButton mode='contained' icon={props.flashCard.unknown ? 'flag-variant' : 'flag-variant-outline'} onPress={handleFlagging}></IconButton>
+					</View>} />
 			<Card.Content>
 				{props.showResult ?
 					<Text style={{ color: isCorrect ? 'green' : 'red' }} variant='headlineSmall'>{answer || 'No answer provided'}</Text>
@@ -107,4 +118,10 @@ const styles = StyleSheet.create({
 		padding: 10,
 		marginVertical: '1%',
 	},
+	topBar: {
+		display: 'flex',
+		justifyContent: 'space-between',
+		alignContent: 'center',
+		flexDirection: 'row',
+	}
 });

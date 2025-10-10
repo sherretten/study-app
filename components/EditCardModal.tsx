@@ -16,7 +16,7 @@ export default function EditCardModal(props: { open: boolean, onClose: () => voi
 
 			props.onClose();
 		} catch (err) {
-
+			console.error("Error updating card", err);
 		}
 	}, [definition, props, term]);
 
