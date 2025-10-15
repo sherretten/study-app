@@ -119,8 +119,9 @@ const styles = StyleSheet.create({
 		marginVertical: '1%',
 	},
 	topBar: {
-		justifyContent: 'space-between',
 		flexDirection: 'row',
-		width: '100%'
+		justifyContent: 'space-between',
+		alignContent: 'flex-start',
+		width: '95%',
 	}
 });
