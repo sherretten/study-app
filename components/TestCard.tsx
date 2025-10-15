@@ -41,6 +41,7 @@ export default function TestCard(props: { flashCard: FlashCard, showResult: bool
 	const [answer, setAnswer] = useState('');
 	const [termHeight, setTermHeight] = useState(50);
 	const [showAnswer, setShowAnswer] = useState(false);
+	const [flagged, setFlagged] = useState(props.flashCard.unknown);
 
 	const theme = useTheme();
 
@@ -57,8 +58,6 @@ export default function TestCard(props: { flashCard: FlashCard, showResult: bool
 
 	}, [answer, props.flashCard.definition]);
 
-	console.debug(props.flashCard.term, isCorrect);
-
 	useEffect(() => {
 		props.updateAnswer(props.flashCard.id, answer, isCorrect);
 	}, [answer, isCorrect, props.flashCard.id])
@@ -68,16 +67,17 @@ export default function TestCard(props: { flashCard: FlashCard, showResult: bool
 	}, []);
 
 	const handleFlagging = useCallback(async () => {
-		await cardQueries.upsertCards([{ ...props.flashCard, unknown: !props.flashCard.unknown }], props.flashCard.set_id);
-	}, [props.flashCard]);
+		await cardQueries.upsertCards([{ ...props.flashCard, unknown: !flagged }], props.flashCard.set_id);
+		setFlagged(flagged => !flagged);
+	}, [flagged, props.flashCard]);
 
 	return (
 		<Card style={styles.container}>
 			<Card.Title
 				title={
 					<View style={styles.topBar}>
-						<Text>{props.flashCard.term}</Text>
-						<IconButton mode='contained' icon={props.flashCard.unknown ? 'flag-variant' : 'flag-variant-outline'} onPress={handleFlagging}></IconButton>
+						<Text variant='displaySmall'>{props.flashCard.term}</Text>
+						<IconButton mode='contained' icon={flagged ? 'flag-variant' : 'flag-variant-outline'} onPress={handleFlagging}></IconButton>
 					</View>} />
 			<Card.Content>
 				{props.showResult ?
@@ -119,9 +119,8 @@ const styles = StyleSheet.create({
 		marginVertical: '1%',
 	},
 	topBar: {
-		display: 'flex',
 		justifyContent: 'space-between',
-		alignContent: 'center',
 		flexDirection: 'row',
+		width: '100%'
 	}
 });

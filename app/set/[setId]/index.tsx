@@ -18,7 +18,6 @@ export default function SetView() {
 	const [modalOpen, setModalOpen] = useState(false);
 	const [exportModalOpen, setExportModalOpen] = useState(false);
 
-	console.debug(cards);
 	const theme = useTheme();
 	const router = useRouter();
 
@@ -41,7 +40,6 @@ export default function SetView() {
 			[cardsCopy[i], cardsCopy[j]] = [cardsCopy[j], cardsCopy[i]];
 		}
 
-		console.debug(cardsCopy);
 		setCards(cardsCopy);
 		setIndex(0);
 	}, [cards]);
