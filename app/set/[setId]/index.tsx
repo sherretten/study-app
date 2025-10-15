@@ -51,6 +51,12 @@ export default function SetView() {
 		}, [loadData])
 	)
 
+	const handleFlagging = useCallback(async () => {
+		const currentCard = cards[viewingIndex];
+		await cardQueries.upsertCards([{ ...currentCard, unknown: !currentCard.unknown }], +setId);
+		await loadData();
+	}, [cards, loadData, setId, viewingIndex]);
+
 	return (
 		<SafeAreaView style={styles.container}>
 			<Card>
@@ -91,6 +97,8 @@ export default function SetView() {
 										icon='pencil'
 										onPress={() => setModalOpen(true)}
 										style={{ backgroundColor: theme.colors.secondary }}></IconButton>
+
+									<IconButton onPress={handleFlagging} mode='contained' icon={cards[viewingIndex].unknown ? 'flag-variant' : 'flag-variant-outline'}></IconButton>
 									<Text>{viewingIndex + 1} / {cards.length}</Text>
 								</View>
 								<Button buttonColor={theme.colors.primary}

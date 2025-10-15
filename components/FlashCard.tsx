@@ -1,12 +1,10 @@
-import { cardQueries } from '@/db/queries/cardQueries';
 import { Card } from '@/db/types';
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { Animated, Pressable, StyleSheet, View } from 'react-native';
-import { IconButton, Text } from 'react-native-paper';
+import { useEffect, useRef, useState } from 'react';
+import { Animated, Pressable, StyleSheet } from 'react-native';
+import { Text } from 'react-native-paper';
 
 export default function FlashCard(props: { flashCard: Card }) {
-	const [showAnswer, setShowAnswer] = useState(false)
-	const [flagged, setFlagged] = useState(props.flashCard.unknown);
+	const [showAnswer, setShowAnswer] = useState(false);
 	const animatedValue = useRef(new Animated.Value(0)).current;
 
 	useEffect(() => {
@@ -45,16 +43,8 @@ export default function FlashCard(props: { flashCard: Card }) {
 		setShowAnswer(!showAnswer);
 	};
 
-	const handleFlagging = useCallback(async () => {
-		await cardQueries.upsertCards([{ ...props.flashCard, unknown: !flagged }], props.flashCard.set_id);
-		setFlagged(flagged => !flagged)
-	}, [flagged, props.flashCard]);
-
 	return (
 		<Pressable onPress={flipCard} style={styles.cardContainer}>
-			<View style={styles.flagButton}>
-				<IconButton onPress={handleFlagging} mode='contained' icon={flagged ? 'flag-variant' : 'flag-variant-outline'}></IconButton>
-			</View>
 			<Animated.View style={[styles.card, { transform: [{ rotateX: frontInterpolate }], overflow: 'scroll' }]}>
 				<Text style={styles.cardText} variant='displaySmall' adjustsFontSizeToFit>{!showAnswer && props?.flashCard?.term}</Text>
 			</Animated.View>
