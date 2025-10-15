@@ -76,7 +76,7 @@ export default function TestCard(props: { flashCard: FlashCard, showResult: bool
 			<Card.Title
 				title={
 					<View style={styles.topBar}>
-						<Text variant='displaySmall'>{props.flashCard.term}</Text>
+						<Text variant='headlineMedium'>{props.flashCard.term}</Text>
 						<IconButton mode='contained' icon={flagged ? 'flag-variant' : 'flag-variant-outline'} onPress={handleFlagging}></IconButton>
 					</View>} />
 			<Card.Content>
