@@ -40,7 +40,12 @@ export default function RootLayout() {
 		<PaperProvider theme={{ dark: false }}>
 			<Suspense fallback={<ActivityIndicator animating color={MD2Colors.blue200} />}>
 				<SQLiteProvider databaseName='study-app.db' onInit={createDbIfNone} useSuspense>
-					<Stack screenOptions={{ contentStyle: { backgroundColor: '#283444' }, headerRight: (props) => <Link {...props} href={`/`}><Button icon='home'>Home</Button></Link> }}>
+					<Stack
+						screenOptions={{
+							contentStyle: { backgroundColor: '#283444' },
+							headerRight: (props) => <Link {...props} href={`/`}><Button icon='home'>Home</Button></Link>,
+							animation: 'ios_from_right',
+						}}>
 						<Stack.Screen name='index' options={{ title: 'Home' }}></Stack.Screen>
 						<Stack.Screen name='classes' options={{ title: 'Courses', headerBackButtonMenuEnabled: true }}></Stack.Screen>
 						<Stack.Screen name='set/[setId]' options={{ headerShown: false }} />

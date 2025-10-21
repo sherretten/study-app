@@ -7,7 +7,8 @@ export default function Layout() {
 		<Stack
 			screenOptions={{
 				contentStyle: { backgroundColor: '#283444' },
-				headerRight: (props) => <Link {...props} href={`/`}><Button icon='home'>Home</Button></Link>
+				headerRight: (props) => <Link {...props} href={`/`}><Button icon='home'>Home</Button></Link>,
+				animation: 'ios_from_right',
 			}}>
 			<Stack.Screen name='edit' options={{ title: 'Edit Set', headerBackButtonMenuEnabled: true }} />
 			<Stack.Screen name='test' options={{ title: 'Test Set', headerBackButtonMenuEnabled: true }} />

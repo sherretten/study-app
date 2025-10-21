@@ -83,7 +83,6 @@ export default function EditSet() {
 					<View style={styles.headerContainer}>
 						<TextInput label="Title" value={setName} onChangeText={text => setSetName(text)} style={{ margin: 2, flex: 1 }} />
 						<Button mode='outlined' onPress={addCard}>Add Card</Button>
-
 					</View>
 
 					{cards.map((card, i) => <CreateCard key={card.id} card={card} updateCard={updateCard} removeCard={deleteCard} index={i} autoFocus />)}

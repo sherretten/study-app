@@ -30,10 +30,15 @@ export default function CreateSet() {
 	}
 
 	async function deleteCard(cardId: number) {
-		setCards(cards => {
-			const card = cards.filter(c => c.id !== cardId);
-			return card;
-		})
+		try {
+			// await cardQueries.deleteCardById(cardId);
+			setCards(cards => {
+				const card = cards.filter(c => c.id !== cardId);
+				return card;
+			})
+		} catch (err) {
+			console.debug(`Error deleting card: ${err}`);
+		}
 	}
 
 	function handleSaveImport() {
