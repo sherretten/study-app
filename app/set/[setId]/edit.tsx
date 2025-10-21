@@ -10,7 +10,7 @@ import { Button, Card, TextInput } from 'react-native-paper';
 
 
 export default function EditSet() {
-	const { courseId, setId } = useLocalSearchParams<{ courseId: string, setId: string }>();
+	const { setId } = useLocalSearchParams<{ setId: string }>();
 	const [setName, setSetName] = useState('');
 	const [cards, setCards] = useState<FlashCard[]>([])
 	const [loading, setLoading] = useState(false);
@@ -77,7 +77,7 @@ export default function EditSet() {
 	}
 
 	return (
-		<ScrollView style={styles.container} ref={scrollViewRef} onContentSizeChange={handleScrollToBottom}>
+		<ScrollView style={styles.container} ref={scrollViewRef}>
 			<Card>
 				<Card.Content style={styles.cardContainer}>
 					<View style={styles.headerContainer}>

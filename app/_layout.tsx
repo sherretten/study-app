@@ -15,7 +15,6 @@ async function AddUnknownColumnMigration(db: SQLiteDatabase) {
 		const columns = await db.getAllAsync(`PRAGMA table_info(cards);`);
 
 		const hasUnknownColumn = columns.some((col) => col.name === "unknown");
-		console.debug(columns);
 
 		if (!hasUnknownColumn) {
 			await db.execAsync(`ALTER TABLE cards ADD COLUMN unknown BOOLEAN DEFAULT FALSE;`);
