@@ -7,7 +7,7 @@ export default function Index() {
 
 	return (
 		<SafeAreaView style={styles.container}>
-			<Text variant='displayLarge' style={{ color: 'white', textAlign: 'center' }}>I love George, she is the best {'<3'}</Text>
+			<Text variant='displayLarge' style={{ color: 'white', textAlign: 'center' }}>Good luck on midterms 🥰</Text>
 			<RecentSets />
 			<Classes />
 		</SafeAreaView>

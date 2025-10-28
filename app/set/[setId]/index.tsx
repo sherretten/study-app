@@ -44,6 +44,16 @@ export default function SetView() {
 		setIndex(0);
 	}, [cards]);
 
+	const handleDelete = useCallback(async () => {
+		try {
+			await setQueries.deleteSet(+setId);
+
+			router.push("/");
+		} catch (err) {
+			console.log('error deleting set', err)
+		}
+	}, []);
+
 
 	useFocusEffect(
 		useCallback(() => {
@@ -66,16 +76,22 @@ export default function SetView() {
 					</View>
 
 					<View style={styles.cardActions}>
-						<Button buttonColor={theme.colors.primary} textColor='white' icon='test-tube' onPress={() => router.push(`/set/${setId}/test`)}>
-							Test
-						</Button>
-						<Button buttonColor={theme.colors.primary} textColor='white' icon='refresh' onPress={handleShuffle}>
-							Shuffle
-						</Button>
-						<Button buttonColor={theme.colors.primary} textColor='white' icon='export' onPress={() => setExportModalOpen(true)}>Export</Button>
-						<Button buttonColor={theme.colors.primary} textColor='white' icon='pencil' mode='outlined'>
-							<Link href={`/set/${setId}/edit?courseId=${set?.class_id}`}>Edit Cards</Link>
-						</Button>
+						<View style={styles.nonDestructiveActions}>
+							<Button buttonColor={theme.colors.primary} textColor='white' icon='test-tube' onPress={() => router.push(`/set/${setId}/test`)}>
+								Test
+							</Button>
+							<Button buttonColor={theme.colors.primary} textColor='white' icon='refresh' onPress={handleShuffle}>
+								Shuffle
+							</Button>
+							<Button buttonColor={theme.colors.primary} textColor='white' icon='export' onPress={() => setExportModalOpen(true)}>Export</Button>
+							<Button buttonColor={theme.colors.primary} textColor='white' icon='pencil' mode='outlined'>
+								<Link href={`/set/${setId}/edit?courseId=${set?.class_id}`}>Edit Cards</Link>
+							</Button>
+
+						</View>
+						<View>
+							<Button buttonColor={theme.colors.error} textColor='white' icon='trash-can' onPress={handleDelete}>Delete</Button>
+						</View>
 					</View>
 
 					<ExportSetModal cards={cards} open={exportModalOpen} onClose={() => setExportModalOpen(false)} />
@@ -137,6 +153,7 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		gap: 2,
 		flexWrap: 'wrap',
+		justifyContent: 'space-between'
 	},
 	flashCardContainer: {
 		display: 'flex',
@@ -149,6 +166,11 @@ const styles = StyleSheet.create({
 		alignItems: 'baseline',
 		justifyContent: 'space-evenly',
 		marginBottom: 5,
-		// maxWidth: 600,
 	},
+	nonDestructiveActions: {
+		flexDirection: 'row',
+		gap: 2,
+		flexWrap: 'wrap',
+		justifyContent: 'space-between'
+	}
 })
