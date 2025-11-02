@@ -12,6 +12,7 @@ export default function TestSet() {
 	const [cards, setCards] = useState<Card[]>([])
 	const [showResults, setShowResults] = useState(false);
 	const [showOnlyFlagged, setFlagged] = useState(false);
+	const [results, setResults] = useState<{ cardId: number, answer: string, isCorrect: boolean }[]>([]);
 
 	const theme = useTheme();
 
