@@ -12,11 +12,8 @@ export default function TestSet() {
 	const [cards, setCards] = useState<Card[]>([])
 	const [showResults, setShowResults] = useState(false);
 	const [showOnlyFlagged, setFlagged] = useState(false);
-	const [results, setResults] = useState<{ cardId: number, answer: string, isCorrect: boolean }[]>([]);
 
 	const theme = useTheme();
-
-	console.debug(cards);
 
 	useEffect(() => {
 		const fetchCards = async () => {
@@ -24,7 +21,6 @@ export default function TestSet() {
 				const cardsRes = await cardQueries.getCardsBySetId(+setId);
 
 				setCards(cardsRes);
-				setResults(cardsRes?.map(c => ({ cardId: c.id, answer: '', isCorrect: false })));
 			} catch (err) {
 				console.error(`Error fetching cards for set: ${setId}`, err);
 			}

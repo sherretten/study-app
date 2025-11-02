@@ -56,7 +56,6 @@ export default function CreateSet() {
 	async function handleSave() {
 		try {
 			setLoading(true);
-			console.debug(setName);
 			const newSetId = await setQueries.createSet({ name: setName, class_id: +courseId });
 			await cardQueries.createCards(cards, newSetId);
 

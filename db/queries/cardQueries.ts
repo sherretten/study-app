@@ -20,7 +20,6 @@ export const cardQueries = {
 		
 		await db.withTransactionAsync(async () => {
 			for (const card of cards) {
-				console.debug(card.id || crypto.randomUUID(), card.term, card.definition, card.set_id);
 				await db.runAsync(`
 					INSERT INTO cards (id, term, definition, unknown, set_id)
 					VALUES (?, ?, ?, ?, ?)
