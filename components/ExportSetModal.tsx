@@ -5,7 +5,7 @@ import { Modal, Portal, Text, TextInput, useTheme } from 'react-native-paper';
 export default function ExportSetModal(props: { cards: Card[], open: boolean, onClose: () => void }) {
 	const theme = useTheme();
 
-	const cardString = props.cards.map(c => `${c.term}\n${c.definition}`).join(';');
+	const cardString = props.cards.map(c => `${c.term}\t${c.definition}`).join(';');
 	return (
 		<Portal>
 			<Modal visible={props.open} onDismiss={props.onClose} dismissable style={{ marginHorizontal: '20%' }}>
